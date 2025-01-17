@@ -1,0 +1,6 @@
+@SqlDataGenerator_HostAddress = http://localhost:5023
+
+GET {{SqlDataGenerator_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
