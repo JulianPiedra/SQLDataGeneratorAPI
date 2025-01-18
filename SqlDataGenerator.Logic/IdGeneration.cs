@@ -7,13 +7,13 @@ namespace SqlDataGenerator.Logic
 {
     public class IdGeneration : IIdGeneration
     {
-        public async Task<BusinessLogicResponse> GenerateIds(IdNumberConfig idNumber)
+        public async Task<BusinessLogicResponse> GenerateIds(IdNumberConfig idNumberConfig)
         {
             try
             {
                 var random = new Random();
                 var allowedChars = "0123456789";
-                if (idNumber.HasLetters)
+                if (idNumberConfig.HasLetters)
                 {
                     allowedChars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                 }
@@ -24,16 +24,16 @@ namespace SqlDataGenerator.Logic
 
                 // Use Parallel.For to generate IDs concurrently for large numbers of records
                 await Task.WhenAll(
-                    Enumerable.Range(0, idNumber.Records).Select(async _ =>
+                    Enumerable.Range(0, idNumberConfig.Records).Select(async _ =>
                     {
 
                         string generatedId;
                         do
                         {
-                            generatedId = GenerateRandomId(idNumber.Lenght, allowedChars, random);
+                            generatedId = GenerateRandomId(idNumberConfig.Lenght, allowedChars, random);
                         } while (!generatedIds.Add(generatedId));  // Ensure uniqueness
 
-                        uniqueIds.Add(new IdNumber { Id = idNumber.IsInteger ? Int64.Parse(generatedId) : generatedId });
+                        uniqueIds.Add(new IdNumber { Id = idNumberConfig.IsInteger ? Int64.Parse(generatedId) : generatedId });
                     })
                 );
 
