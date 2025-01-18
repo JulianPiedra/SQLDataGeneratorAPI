@@ -20,18 +20,20 @@ namespace SqlDataGenerator.Logic
 
                 var uniqueIds = new ConcurrentBag<IdNumber>();  // Thread-safe collection
                 var generatedIds = new HashSet<string>(); // To ensure no duplicates
+                
 
                 // Use Parallel.For to generate IDs concurrently for large numbers of records
                 await Task.WhenAll(
                     Enumerable.Range(0, idNumber.Records).Select(async _ =>
                     {
+
                         string generatedId;
                         do
                         {
                             generatedId = GenerateRandomId(idNumber.Lenght, allowedChars, random);
                         } while (!generatedIds.Add(generatedId));  // Ensure uniqueness
 
-                        uniqueIds.Add(new IdNumber { Id = generatedId });
+                        uniqueIds.Add(new IdNumber { Id = idNumber.IsInteger ? Int64.Parse(generatedId) : generatedId });
                     })
                 );
 
@@ -40,6 +42,7 @@ namespace SqlDataGenerator.Logic
                     StatusCode = 200,
                     ObjectResponse = uniqueIds.ToList()
                 };
+
             }
             catch (Exception ex)
             {

@@ -8,6 +8,7 @@ namespace SqlDataGenerator.Models
 {
     public class IdNumber
     {
-        public string Id { get; set; }
+        public dynamic Id { get; set; }
+        
     }
 }
