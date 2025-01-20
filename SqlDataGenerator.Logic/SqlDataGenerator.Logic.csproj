@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SqlDataGenerator.Abstract\SqlDataGenerator.Abstract.csproj" />
     <ProjectReference Include="..\SqlDataGenerator.Models\SqlDataGenerator.Models.csproj" />
+    <ProjectReference Include="..\SQLDataGeneratorAPI.DataAccess\SQLDataGeneratorAPI.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

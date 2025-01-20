@@ -12,7 +12,7 @@ namespace SqlDataGenerator.Endpoints
     {
         public static void MapIdGenerationEndpoints(this IEndpointRouteBuilder routes)
         {
-            var group = routes.MapGroup("/").WithTags(nameof(IdNumberConfig));
+            var group = routes.MapGroup("/").WithTags("ID Generation");
 
             group.MapGet("/generate_ids",async (
                 IIdGeneration idGeneration,
@@ -29,14 +29,14 @@ namespace SqlDataGenerator.Endpoints
                 {
                     return Results.BadRequest(new { Message = "Records cannot exceed 1,000,000 and Length cannot exceed 40" });
                 }
-                if (has_letters.Value && is_integer.Value) {
+                if (has_letters!.Value && is_integer!.Value) {
                     return Results.BadRequest(new { Message = "Records can't be casted as integer when they have letters" });
                 }
 
                 IdNumberConfig idNumberConfig = new IdNumberConfig(
                     records.Value,
                     lenght.Value,
-                    is_integer.Value,
+                    is_integer!.Value,
                     has_letters.Value
                 );
                 var result = await idGeneration.GenerateIds(idNumberConfig);

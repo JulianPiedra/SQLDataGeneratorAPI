@@ -6,6 +6,7 @@ using SqlDataGenerator.Logic;
 using SQLDataGeneratorAPI.DataAccess.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using static System.Net.WebRequestMethods;
+using SqlDataGeneratorAPI.Endpoints.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SQLGeneratorContext>(options =>
@@ -42,16 +43,24 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<IIdGeneration, IdGeneration>();
+builder.Services.AddScoped<INameGeneration, NameGeneration>();
+
 builder.Services.AddAuthentication("ApiKey")
     .AddScheme<ApiKeyAuthenticationSchemeOptions, ApiKeyAuthenticationSchemeHandler>(
         "ApiKey",
-        opts => opts.ApiKey = builder.Configuration.GetValue<string>("ApiKey") // Use correct key
+        opts => opts.ApiKey = builder.Configuration.GetValue<string>("ApiKey") ?? "No key provided"
     );
 
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+};
 
 
 app.UseHttpsRedirection();
@@ -61,6 +70,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapIdGenerationEndpoints();
+
+app.MapNameGenerationEndpoints();
 
 
 app.Run();
