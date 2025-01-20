@@ -1,12 +1,15 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SqlDataGenerator.Abstract;
 using SqlDataGenerator.Endpoints;
 using SqlDataGenerator.Logic;
+using SQLDataGeneratorAPI.DataAccess.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using static System.Net.WebRequestMethods;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddDbContext<SQLGeneratorContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -14,7 +17,7 @@ builder.Services.AddSwaggerGen(options =>
     options.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
-        Name = "X-API-KEY", // The name of the header where the API key is passed
+        Name = "X_API_KEY", // The name of the header where the API key is passed
         Type = SecuritySchemeType.ApiKey,
         Description = "Unauthorized. API key is missing or invalid."
         
@@ -50,6 +53,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+
 app.UseHttpsRedirection();
 
 app.UseRouting();
@@ -57,6 +61,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapIdGenerationEndpoints();
+
 
 app.Run();
 

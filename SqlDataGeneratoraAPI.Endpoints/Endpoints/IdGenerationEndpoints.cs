@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SqlDataGenerator.Abstract;
 using SqlDataGenerator.Logic;
 using SqlDataGenerator.Models;
+using SQLDataGeneratorAPI.DataAccess.Models;
 
 namespace SqlDataGenerator.Endpoints
 {
@@ -11,7 +12,7 @@ namespace SqlDataGenerator.Endpoints
     {
         public static void MapIdGenerationEndpoints(this IEndpointRouteBuilder routes)
         {
-            var group = routes.MapGroup("/").WithTags("IdGeneration");
+            var group = routes.MapGroup("/").WithTags(nameof(IdNumberConfig));
 
             group.MapGet("/generate_ids",async (
                 IIdGeneration idGeneration,
@@ -44,7 +45,8 @@ namespace SqlDataGenerator.Endpoints
                     200 => Results.Ok(result.ObjectResponse),
                     _ => Results.Json(result.Message, statusCode: result.StatusCode)
                 };
-            }).RequireAuthorization();
+            }).RequireAuthorization()
+            .WithOpenApi();
 
 
         }

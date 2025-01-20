@@ -13,7 +13,7 @@ public class ApiKeyAuthenticationSchemeHandler : AuthenticationHandler<ApiKeyAut
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         // Extract the API key from the request header
-        var apiKey = Context.Request.Headers["X-API-KEY"];
+        var apiKey = Context.Request.Headers["X_API_KEY"];
 
         
 
@@ -22,7 +22,7 @@ public class ApiKeyAuthenticationSchemeHandler : AuthenticationHandler<ApiKeyAut
             // Handle failed authentication and set response
             Context.Response.StatusCode = 401;
             await Context.Response.WriteAsJsonAsync(new { Message = "API Key is missing or invalid check our documentation for the instructions on how to use the API" });
-            return AuthenticateResult.Fail("Invalid or missing X-API-KEY");
+            return AuthenticateResult.Fail("Invalid or missing X_API_KEY");
         }
 
         // If valid, create claims for the user

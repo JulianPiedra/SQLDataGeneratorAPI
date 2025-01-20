@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlDataGenerator.Models", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlDataGeneratorAPI.Endpoints", "SqlDataGeneratoraAPI.Endpoints\SqlDataGeneratorAPI.Endpoints.csproj", "{79FF4342-AE68-4C9E-8AF0-06F1D832129F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLDataGeneratorAPI.DataAccess", "SQLDataGeneratorAPI.DataAccess\SQLDataGeneratorAPI.DataAccess.csproj", "{95DA3667-D58A-4214-A63D-667C5425D95B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{79FF4342-AE68-4C9E-8AF0-06F1D832129F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79FF4342-AE68-4C9E-8AF0-06F1D832129F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79FF4342-AE68-4C9E-8AF0-06F1D832129F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95DA3667-D58A-4214-A63D-667C5425D95B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95DA3667-D58A-4214-A63D-667C5425D95B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95DA3667-D58A-4214-A63D-667C5425D95B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95DA3667-D58A-4214-A63D-667C5425D95B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
