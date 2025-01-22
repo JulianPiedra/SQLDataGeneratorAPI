@@ -21,6 +21,8 @@ public partial class SQLGeneratorContext : DbContext
 
     public virtual DbSet<LastName> LastName { get; set; }
 
+    public virtual DbSet<City> City { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=DefaultConnection");
 
@@ -60,6 +62,16 @@ public partial class SQLGeneratorContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("LastName");
+        });
+
+        modelBuilder.Entity<City>(entity =>
+        {
+            entity.HasKey(e => e.CityName);
+
+            entity.Property(e => e.CityName)
+                .HasMaxLength(40)
+                .IsUnicode(false)
+                .HasColumnName("CityName");
         });
 
         OnModelCreatingPartial(modelBuilder);

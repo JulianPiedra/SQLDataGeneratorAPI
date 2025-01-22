@@ -7,25 +7,22 @@ using Microsoft.AspNetCore.Mvc;
 using SqlDataGenerator.Logic;
 namespace SqlDataGeneratorAPI.Endpoints.Endpoints;
 
-public static class CountryEndpoints
+public static class CountryGenerationEndpoints
 {
     public static void MapCountryGenerationEndpoints(this IEndpointRouteBuilder routes)
     {
-        var group = routes.MapGroup("/api/country_generation").WithTags(nameof(Country));
+        var group = routes.MapGroup("/api/country_generation").WithTags("Country Generation");
 
         group.MapGet("/generate_country", async (
             SQLGeneratorContext db,
             ICountryGeneration countryGeneration,
             [FromHeader] int? records) =>
         {
-            if (records == null)
+            var valiteRecords = RecordsValidator.ValidateRecords(records);
+            if (valiteRecords.StatusCode != 200)
             {
-                return Results.BadRequest(new { Message = "Records must be provided" });
-            }
-            if (records > 1000000)
-            {
-                return Results.BadRequest(new { Message = "Records cannot exceed 1,000,000 and Length cannot exceed 40" });
-            }
+                return Results.Json(new { Message = valiteRecords.Message}, statusCode:valiteRecords.StatusCode );
+            }   
 
             var result = await countryGeneration.GenerateCountry(records);
             return result.StatusCode switch
@@ -42,13 +39,10 @@ public static class CountryEndpoints
             ICountryGeneration countryGeneration,
             [FromHeader] int? records) =>
         {
-            if (records == null)
+            var valiteRecords = RecordsValidator.ValidateRecords(records);
+            if (valiteRecords.StatusCode != 200)
             {
-                return Results.BadRequest(new { Message = "Records must be provided" });
-            }
-            if (records > 1000000)
-            {
-                return Results.BadRequest(new { Message = "Records cannot exceed 1,000,000 and Length cannot exceed 40" });
+                return Results.Json(new { Message = valiteRecords.Message }, statusCode: valiteRecords.StatusCode);
             }
 
             var result = await countryGeneration.GenerateAlphaCode(records);
@@ -66,13 +60,10 @@ public static class CountryEndpoints
             ICountryGeneration countryGeneration,
             [FromHeader] int? records) =>
         {
-            if (records == null)
+            var valiteRecords = RecordsValidator.ValidateRecords(records);
+            if (valiteRecords.StatusCode != 200)
             {
-                return Results.BadRequest(new { Message = "Records must be provided" });
-            }
-            if (records > 1000000)
-            {
-                return Results.BadRequest(new { Message = "Records cannot exceed 1,000,000 and Length cannot exceed 40" });
+                return Results.Json(new { Message = valiteRecords.Message }, statusCode: valiteRecords.StatusCode);
             }
 
             var result = await countryGeneration.GenerateNumericCode(records);

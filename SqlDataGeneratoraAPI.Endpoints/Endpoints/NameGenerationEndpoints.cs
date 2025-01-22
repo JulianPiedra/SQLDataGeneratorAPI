@@ -21,13 +21,10 @@ public static class NameGenerationEndpoints
             INameGeneration nameGeneration, 
             [FromHeader] int? records) =>
         {
-            if (records == null)
+            var valiteRecords = RecordsValidator.ValidateRecords(records);
+            if (valiteRecords.StatusCode != 200)
             {
-                return Results.BadRequest(new { Message = "Records must be provided" });
-            }
-            if (records > 1000000)
-            {
-                return Results.BadRequest(new { Message = "Records cannot exceed 1,000,000 and Length cannot exceed 40" });
+                return Results.Json(new { Message = valiteRecords.Message }, statusCode: valiteRecords.StatusCode);
             }
 
             var result = await nameGeneration.GenerateWholeNames(records);
@@ -45,13 +42,10 @@ public static class NameGenerationEndpoints
             INameGeneration nameGeneration,
             [FromHeader] int? records) =>
         {
-            if (records == null)
+            var valiteRecords = RecordsValidator.ValidateRecords(records);
+            if (valiteRecords.StatusCode != 200)
             {
-                return Results.BadRequest(new { Message = "Records must be provided" });
-            }
-            if (records > 1000000)
-            {
-                return Results.BadRequest(new { Message = "Records cannot exceed 1,000,000 and Length cannot exceed 40" });
+                return Results.Json(new { Message = valiteRecords.Message }, statusCode: valiteRecords.StatusCode);
             }
             var result = await nameGeneration.GenerateFirstNames(records);
             return result.StatusCode switch
@@ -68,13 +62,10 @@ public static class NameGenerationEndpoints
             INameGeneration nameGeneration,
             [FromHeader] int? records) =>
         {
-            if (records == null)
+            var valiteRecords = RecordsValidator.ValidateRecords(records);
+            if (valiteRecords.StatusCode != 200)
             {
-                return Results.BadRequest(new { Message = "Records must be provided" });
-            }
-            if (records > 1000000)
-            {
-                return Results.BadRequest(new { Message = "Records cannot exceed 1,000,000 and Length cannot exceed 40" });
+                return Results.Json(new { Message = valiteRecords.Message }, statusCode: valiteRecords.StatusCode);
             }
             var result = await nameGeneration.GenerateLastNames(records);
             return result.StatusCode switch

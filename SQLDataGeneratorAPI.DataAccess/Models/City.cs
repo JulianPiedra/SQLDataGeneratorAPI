@@ -4,8 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace SQLDataGeneratorAPI.DataAccess.Models;
 
-public partial class LastName
+public partial class City
 {
-
-    public string LastName1 { get; set; } = null!;
+    public string CityName { get; set; } = null!;
 }

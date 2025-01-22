@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SqlDataGenerator.Abstract;
 using SqlDataGenerator.Logic;
 using SqlDataGenerator.Models;
+using SqlDataGeneratorAPI.Endpoints.Endpoints;
 using SQLDataGeneratorAPI.DataAccess.Models;
 
 namespace SqlDataGenerator.Endpoints
@@ -14,24 +15,37 @@ namespace SqlDataGenerator.Endpoints
         {
             var group = routes.MapGroup("/api/id_generation").WithTags("ID Generation");
 
-            group.MapGet("/generate_id",async (
+            group.MapGet("/generate_id", async (
                 IIdGeneration idGeneration,
                 [FromHeader] int? records,
                 [FromHeader] int? lenght,
-                [FromHeader] bool? is_integer = false, 
+                [FromHeader] bool? is_integer = false,
                 [FromHeader] bool? has_letters = false) =>
             {
-                if (records == null || lenght == null)
+                var valiteRecords = RecordsValidator.ValidateRecords(records);
+                if (valiteRecords.StatusCode != 200)
                 {
-                    return Results.BadRequest(new { Message = "Records and Length must be provided" } );
+                    return Results.Json(new { Message = valiteRecords.Message }, statusCode: valiteRecords.StatusCode);
                 }
-                if (records > 1000000 || lenght > 40)
+                if (lenght == null)
                 {
-                    return Results.BadRequest(new { Message = "Records cannot exceed 1,000,000 and Length cannot exceed 40" });
+                    return Results.BadRequest(new { Message = "Length is required" });
                 }
-                if (has_letters!.Value && is_integer!.Value) {
+
+                if (has_letters!.Value && is_integer!.Value)
+                {
                     return Results.BadRequest(new { Message = "Records can't be casted as integer when they have letters" });
                 }
+                if (lenght.Value < 6)
+                {
+                    int characters = has_letters.Value ? 36 : 10;
+                    int posibleValues = (int)Math.Pow(characters, lenght.Value);
+                    if (records > posibleValues)
+                    {
+                        return Results.BadRequest(new { Message = "Records exceed the possible values for the given length" });
+                    }
+                }
+
 
                 IdNumberConfig idNumberConfig = new IdNumberConfig(
                     records.Value,
