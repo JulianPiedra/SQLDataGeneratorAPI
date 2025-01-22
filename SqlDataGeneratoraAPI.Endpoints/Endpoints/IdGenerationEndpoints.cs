@@ -12,9 +12,9 @@ namespace SqlDataGenerator.Endpoints
     {
         public static void MapIdGenerationEndpoints(this IEndpointRouteBuilder routes)
         {
-            var group = routes.MapGroup("/").WithTags("ID Generation");
+            var group = routes.MapGroup("/api/id_generation").WithTags("ID Generation");
 
-            group.MapGet("/generate_ids",async (
+            group.MapGet("/generate_id",async (
                 IIdGeneration idGeneration,
                 [FromHeader] int? records,
                 [FromHeader] int? lenght,

@@ -4,87 +4,84 @@ using System.Text;
 using System.Collections.Concurrent;
 using SQLDataGeneratorAPI.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace SqlDataGenerator.Logic
 {
     public class NameGeneration : INameGeneration
     {
-        private readonly SQLGeneratorContext db;
-
-        public NameGeneration(SQLGeneratorContext db)
+        private readonly SQLGeneratorContext Context;
+        private readonly FetchFromDatabase FetchFromDatabase;
+        public NameGeneration(SQLGeneratorContext context, FetchFromDatabase fetchFromDatabase)
         {
-            this.db = db;
+            Context = context;
+            FetchFromDatabase = fetchFromDatabase;
         }
-        public Task<BusinessLogicResponse> GenerateWholeNames(int? records)
+        public async Task<BusinessLogicResponse> GenerateWholeNames(int? records)
         {
             try
             {
-                var randomFirstNames = ListFirstNames(records).Result;
-                var randomLastNames = ListLastNames(records).Result;
-                var result = randomFirstNames.Zip(randomLastNames, (firstName, lastName) => new
+                // Start the tasks concurrently with their own DbContext instance
+                var randomFirstNames = await FetchFromDatabase.FetchStringListFromDatabase<FirstName>(
+                            records,
+                            Context.FirstName,
+                            f => f.FirstName1);
+
+
+                var randomLastNames = await FetchFromDatabase.FetchStringListFromDatabase<LastName>(
+                            records,
+                            Context.LastName,
+                            f => f.LastName1);
+
+                // Combine the results of both tasks
+                var result = randomFirstNames.Zip(randomLastNames, (firstName , lastName) => new
                 {
                     whole_name = $"{firstName} {lastName}"
                 }).ToList();
-                return Task.FromResult(new BusinessLogicResponse { StatusCode = 200, ObjectResponse = result });
-            }
-            catch (Exception ex)
-            {
-                return Task.FromResult(new BusinessLogicResponse { StatusCode = 500, Message = ex.Message });
-            }
-        }
-        public Task<BusinessLogicResponse> GenerateFirstNames(int? records)
-        {
-            try 
-            {
-                var randomFirstNames = ListFirstNames(records).Result;
-                return Task.FromResult(new BusinessLogicResponse { StatusCode = 200, ObjectResponse = randomFirstNames });
-            }
-            catch (Exception ex)
-            {
-                return Task.FromResult(new BusinessLogicResponse { StatusCode=500, Message = ex.Message });
-            }
-        }
 
-        public Task<BusinessLogicResponse> GenerateLastNames(int? records)
+                return new BusinessLogicResponse { StatusCode = 200, ObjectResponse = result };
+            }
+            catch (Exception ex)
+            {
+                return new BusinessLogicResponse { StatusCode = 500, Message = ex.Message };
+            }
+
+        }
+        public async Task<BusinessLogicResponse> GenerateFirstNames(int? records)
         {
             try
             {
-                var randomLastNames = ListLastNames(records).Result;
-                return Task.FromResult(new BusinessLogicResponse { StatusCode = 200, ObjectResponse = randomLastNames });
+                var randomFirstNames = await FetchFromDatabase.FetchObjectListFromDatabase<FirstName>(
+                                            records,
+                                            "first_name",
+                                            Context.FirstName,
+                                            f => f.FirstName1);
+                return new BusinessLogicResponse { StatusCode = 200, ObjectResponse = randomFirstNames };
             }
             catch (Exception ex)
             {
-                return Task.FromResult(new BusinessLogicResponse { StatusCode = 500, Message = ex.Message });
+                return new BusinessLogicResponse { StatusCode = 500, Message = ex.Message };
             }
         }
 
-        
-        private async Task<List<string>>  ListFirstNames(int? records) {
-            var randomFirstNames = await db.FirstName
-                .OrderBy(r => Guid.NewGuid()) 
-                .Take(records!.Value) 
-                .Select(f => f.FirstName1)
-                .ToListAsync();
-
-            while (randomFirstNames.Count < records.Value)
-            {
-                randomFirstNames.AddRange(randomFirstNames.Take(records.Value - randomFirstNames.Count));
-            }
-            return randomFirstNames;
-        }
-        private async Task<List<string>> ListLastNames(int? records)
+        public async Task<BusinessLogicResponse> GenerateLastNames(int? records)
         {
-            var randomLastNames = await db.LastName
-            .OrderBy(r => Guid.NewGuid())
-            .Take(records!.Value) 
-            .Select(l => l.LastName1)
-            .ToListAsync();
-
-            while (randomLastNames.Count < records.Value)
+            try
             {
-                randomLastNames.AddRange(randomLastNames.Take(records.Value - randomLastNames.Count));
+                var randomLastNames = await FetchFromDatabase.FetchObjectListFromDatabase<LastName>(
+                                            records,
+                                            "last_name",
+                                            Context.LastName,
+                                            f => f.LastName1);
+                return new BusinessLogicResponse { StatusCode = 200, ObjectResponse = randomLastNames };
             }
-            return randomLastNames;
+            catch (Exception ex)
+            {
+                return new BusinessLogicResponse { StatusCode = 500, Message = ex.Message };
+            }
         }
+
+
+
     }
 }

@@ -2,23 +2,20 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OpenApi;
 using SQLDataGeneratorAPI.DataAccess.Models;
-using Microsoft.AspNetCore.Mvc;
-using static Azure.Core.HttpHeader;
-using NuGet.Packaging;
-using SqlDataGenerator.Logic;
-using SqlDataGenerator.Models;
 using SqlDataGenerator.Abstract;
+using Microsoft.AspNetCore.Mvc;
+using SqlDataGenerator.Logic;
 namespace SqlDataGeneratorAPI.Endpoints.Endpoints;
 
-public static class NameGenerationEndpoints
+public static class CountryEndpoints
 {
-    public static void MapNameGenerationEndpoints(this IEndpointRouteBuilder routes)
+    public static void MapCountryGenerationEndpoints(this IEndpointRouteBuilder routes)
     {
-        var group = routes.MapGroup("/api/name_generation").WithTags("Name Generation");
+        var group = routes.MapGroup("/api/country_generation").WithTags(nameof(Country));
 
-        group.MapGet("/generate_whole_name", async (
+        group.MapGet("/generate_country", async (
             SQLGeneratorContext db,
-            INameGeneration nameGeneration, 
+            ICountryGeneration countryGeneration,
             [FromHeader] int? records) =>
         {
             if (records == null)
@@ -30,19 +27,19 @@ public static class NameGenerationEndpoints
                 return Results.BadRequest(new { Message = "Records cannot exceed 1,000,000 and Length cannot exceed 40" });
             }
 
-            var result = await nameGeneration.GenerateWholeNames(records);
+            var result = await countryGeneration.GenerateCountry(records);
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),
                 _ => Results.Json(result.Message, statusCode: result.StatusCode)
             };
         })
-        .WithName("GetWholeNames")
+        .WithName("GetCountries")
         .WithOpenApi();
 
-        group.MapGet("/generate_first_name", async (
+        group.MapGet("/generate_alpha_code", async (
             SQLGeneratorContext db,
-            INameGeneration nameGeneration,
+            ICountryGeneration countryGeneration,
             [FromHeader] int? records) =>
         {
             if (records == null)
@@ -53,19 +50,20 @@ public static class NameGenerationEndpoints
             {
                 return Results.BadRequest(new { Message = "Records cannot exceed 1,000,000 and Length cannot exceed 40" });
             }
-            var result = await nameGeneration.GenerateFirstNames(records);
+
+            var result = await countryGeneration.GenerateAlphaCode(records);
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),
                 _ => Results.Json(result.Message, statusCode: result.StatusCode)
             };
         })
-        .WithName("GetFirstNames")
+        .WithName("GetAlphaCodes")
         .WithOpenApi();
 
-        group.MapGet("/generate_last_name", async (
+        group.MapGet("/generate_numeric_code", async (
             SQLGeneratorContext db,
-            INameGeneration nameGeneration,
+            ICountryGeneration countryGeneration,
             [FromHeader] int? records) =>
         {
             if (records == null)
@@ -76,14 +74,15 @@ public static class NameGenerationEndpoints
             {
                 return Results.BadRequest(new { Message = "Records cannot exceed 1,000,000 and Length cannot exceed 40" });
             }
-            var result = await nameGeneration.GenerateLastNames(records);
+
+            var result = await countryGeneration.GenerateNumericCode(records);
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),
                 _ => Results.Json(result.Message, statusCode: result.StatusCode)
             };
         })
-        .WithName("GetLastNames")
+        .WithName("GetNumericCodes")
         .WithOpenApi();
     }
 }

@@ -44,6 +44,9 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<IIdGeneration, IdGeneration>();
 builder.Services.AddScoped<INameGeneration, NameGeneration>();
+builder.Services.AddScoped<ICountryGeneration, CountryGeneration>();
+builder.Services.AddScoped<FetchFromDatabase>();
+
 
 builder.Services.AddAuthentication("ApiKey")
     .AddScheme<ApiKeyAuthenticationSchemeOptions, ApiKeyAuthenticationSchemeHandler>(
@@ -70,7 +73,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapIdGenerationEndpoints();
-
+app.MapCountryGenerationEndpoints();
 app.MapNameGenerationEndpoints();
 
 
