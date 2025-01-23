@@ -13,7 +13,7 @@ public static class CityGenerationEndpoints
     {
         var group = routes.MapGroup("/api/city_generation").WithTags("City Generation");
 
-        group.MapGet("/genere_city", async (
+        group.MapGet("/generate_city", async (
             SQLGeneratorContext db,
             ICityGeneration cityGeneration,
             [FromHeader] int? records) =>

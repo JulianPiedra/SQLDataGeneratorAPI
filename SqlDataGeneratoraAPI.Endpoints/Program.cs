@@ -46,7 +46,8 @@ builder.Services.AddScoped<IIdGeneration, IdGeneration>();
 builder.Services.AddScoped<INameGeneration, NameGeneration>();
 builder.Services.AddScoped<ICountryGeneration, CountryGeneration>();
 builder.Services.AddScoped<ICityGeneration, CityGeneration>();
-
+builder.Services.AddScoped<IGenderGeneration, GenderGeneration>();
+//builder.Services.AddScoped<RandomDataGeneration>();
 builder.Services.AddScoped<FetchFromDatabase>();
 
 
@@ -78,7 +79,7 @@ app.MapIdGenerationEndpoints();
 app.MapCountryGenerationEndpoints();
 app.MapNameGenerationEndpoints();
 app.MapCityGenerationEndpoints();
-
+app.MapGenderGenerationEndpoints();
 app.Run();
 
 

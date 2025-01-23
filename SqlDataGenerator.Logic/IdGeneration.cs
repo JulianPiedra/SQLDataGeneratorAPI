@@ -30,7 +30,7 @@ namespace SqlDataGenerator.Logic
                         string generatedId;
                         do
                         {
-                            generatedId = GenerateRandomId(idNumberConfig.Lenght, allowedChars, random);
+                            generatedId = RandomDataGeneration.GenerateRandomData(idNumberConfig.Lenght, allowedChars, random);
                         } while (!generatedIds.Add(generatedId));  // Ensure uniqueness
 
                         uniqueIds.Add(new IdNumber { Id = idNumberConfig.IsInteger ? Int64.Parse(generatedId) : generatedId });
@@ -50,17 +50,6 @@ namespace SqlDataGenerator.Logic
             }
         }
 
-        private string GenerateRandomId(int length, string allowedChars, Random random)
-        {
-            // Use StringBuilder to construct the ID efficiently
-            var stringBuilder = new StringBuilder(length);
-
-            for (int i = 0; i < length; i++)
-            {
-                stringBuilder.Append(allowedChars[random.Next(allowedChars.Length)]);
-            }
-
-            return stringBuilder.ToString();
-        }
+        
     }
 }
