@@ -1,11 +1,11 @@
-﻿using SqlDataGenerator.Abstract;
-using SqlDataGenerator.Models;
+﻿using SqlDataGenerator.Models;
 using System.Text;
 using System.Collections.Concurrent;
 using SQLDataGeneratorAPI.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
+using SqlDataGenerator.Abstract.DependencyInjection;
 
-namespace SqlDataGenerator.Logic
+namespace SqlDataGenerator.Logic.GenerationLogic
 {
     public class CountryGeneration : ICountryGeneration
     {
@@ -16,12 +16,12 @@ namespace SqlDataGenerator.Logic
             Context = context;
             FetchFromDatabase = fetchFromDatabase;
         }
-        public async Task<BusinessLogicResponse> GenerateCountry(int? records)
+        public async Task<BusinessLogicResponse> GenerateCountry(Record records)
         {
             try
             {
-                var randomCountries = await FetchFromDatabase.FetchObjectListFromDatabase<Country>(
-                                            records,
+                var randomCountries = await FetchFromDatabase.FetchObjectListFromDatabase(
+                                            records.Records,
                                             "country",
                                             Context.Country,
                                             f => f.CountryName);
@@ -33,12 +33,12 @@ namespace SqlDataGenerator.Logic
                 return new BusinessLogicResponse { StatusCode = 500, Message = ex.Message };
             }
         }
-        public async Task<BusinessLogicResponse> GenerateAlphaCode(int? records)
+        public async Task<BusinessLogicResponse> GenerateAlphaCode(Record records)
         {
             try
             {
-                var randomAlphaCode = await FetchFromDatabase.FetchObjectListFromDatabase<Country>(
-                                            records,
+                var randomAlphaCode = await FetchFromDatabase.FetchObjectListFromDatabase(
+                                            records.Records,
                                             "alpha_code",
                                             Context.Country, f => f.AlphaCode);
 
@@ -50,12 +50,12 @@ namespace SqlDataGenerator.Logic
             }
         }
 
-        public async Task<BusinessLogicResponse> GenerateNumericCode(int? records)
+        public async Task<BusinessLogicResponse> GenerateNumericCode(Record records)
         {
             try
             {
-                var randomNumericCode = await FetchFromDatabase.FetchObjectListFromDatabase<Country>(
-                                            records,
+                var randomNumericCode = await FetchFromDatabase.FetchObjectListFromDatabase(
+                                            records.Records,
                                             "numeric_code",
                                             Context.Country,
                                             f => f.NumericCode);

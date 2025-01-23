@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SqlDataGenerator.Logic
+namespace SqlDataGenerator.Logic.GenerationUtils
 {
     public static class RandomDataGeneration
     {

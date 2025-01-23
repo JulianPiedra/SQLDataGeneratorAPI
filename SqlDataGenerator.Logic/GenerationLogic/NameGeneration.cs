@@ -1,12 +1,12 @@
-﻿using SqlDataGenerator.Abstract;
-using SqlDataGenerator.Models;
+﻿using SqlDataGenerator.Models;
 using System.Text;
 using System.Collections.Concurrent;
 using SQLDataGeneratorAPI.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using SqlDataGenerator.Abstract.DependencyInjection;
 
-namespace SqlDataGenerator.Logic
+namespace SqlDataGenerator.Logic.GenerationLogic
 {
     public class NameGeneration : INameGeneration
     {
@@ -17,24 +17,24 @@ namespace SqlDataGenerator.Logic
             Context = context;
             FetchFromDatabase = fetchFromDatabase;
         }
-        public async Task<BusinessLogicResponse> GenerateWholeNames(int? records)
+        public async Task<BusinessLogicResponse> GenerateWholeNames(Record records)
         {
             try
             {
                 // Start the tasks concurrently with their own DbContext instance
-                var randomFirstNames = await FetchFromDatabase.FetchStringListFromDatabase<FirstName>(
-                            records,
+                var randomFirstNames = await FetchFromDatabase.FetchStringListFromDatabase(
+                            records.Records,
                             Context.FirstName,
                             f => f.FirstName1);
 
 
-                var randomLastNames = await FetchFromDatabase.FetchStringListFromDatabase<LastName>(
-                            records,
+                var randomLastNames = await FetchFromDatabase.FetchStringListFromDatabase(
+                            records.Records,
                             Context.LastName,
                             f => f.LastName1);
 
                 // Combine the results of both tasks
-                var result = randomFirstNames.Zip(randomLastNames, (firstName , lastName) => new
+                var result = randomFirstNames.Zip(randomLastNames, (firstName, lastName) => new
                 {
                     whole_name = $"{firstName} {lastName}"
                 }).ToList();
@@ -47,12 +47,12 @@ namespace SqlDataGenerator.Logic
             }
 
         }
-        public async Task<BusinessLogicResponse> GenerateFirstNames(int? records)
+        public async Task<BusinessLogicResponse> GenerateFirstNames(Record records)
         {
             try
             {
-                var randomFirstNames = await FetchFromDatabase.FetchObjectListFromDatabase<FirstName>(
-                                            records,
+                var randomFirstNames = await FetchFromDatabase.FetchObjectListFromDatabase(
+                                            records.Records,
                                             "first_name",
                                             Context.FirstName,
                                             f => f.FirstName1);
@@ -64,12 +64,12 @@ namespace SqlDataGenerator.Logic
             }
         }
 
-        public async Task<BusinessLogicResponse> GenerateLastNames(int? records)
+        public async Task<BusinessLogicResponse> GenerateLastNames(Record records)
         {
             try
             {
-                var randomLastNames = await FetchFromDatabase.FetchObjectListFromDatabase<LastName>(
-                                            records,
+                var randomLastNames = await FetchFromDatabase.FetchObjectListFromDatabase(
+                                            records.Records,
                                             "last_name",
                                             Context.LastName,
                                             f => f.LastName1);

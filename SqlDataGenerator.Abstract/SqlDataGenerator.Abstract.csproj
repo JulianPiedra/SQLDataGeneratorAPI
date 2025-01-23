@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SqlDataGenerator.Models\SqlDataGenerator.Models.csproj" />
+    <ProjectReference Include="..\SqlDataGenerator.Models\SQLDataGenerator.Models.csproj" />
   </ItemGroup>
 
 </Project>

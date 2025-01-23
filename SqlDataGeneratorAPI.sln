@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlDataGenerator.Abstract", "SqlDataGenerator.Abstract\SqlDataGenerator.Abstract.csproj", "{07F52CF5-BCA3-4328-81D3-3E9960D7F75A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLDataGenerator.Abstract", "SqlDataGenerator.Abstract\SQLDataGenerator.Abstract.csproj", "{07F52CF5-BCA3-4328-81D3-3E9960D7F75A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlDataGenerator.Logic", "SqlDataGenerator.Logic\SqlDataGenerator.Logic.csproj", "{E4A3772A-7C95-45A5-A96A-CD07E6AABE25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLDataGenerator.Logic", "SqlDataGenerator.Logic\SQLDataGenerator.Logic.csproj", "{E4A3772A-7C95-45A5-A96A-CD07E6AABE25}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlDataGenerator.Models", "SqlDataGenerator.Models\SqlDataGenerator.Models.csproj", "{8E86B4D9-B50D-44AE-AF31-EF7F398DBCF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLDataGenerator.Models", "SqlDataGenerator.Models\SQLDataGenerator.Models.csproj", "{8E86B4D9-B50D-44AE-AF31-EF7F398DBCF3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlDataGeneratorAPI.Endpoints", "SqlDataGeneratoraAPI.Endpoints\SqlDataGeneratorAPI.Endpoints.csproj", "{79FF4342-AE68-4C9E-8AF0-06F1D832129F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLDataGeneratorAPI.Endpoints", "SqlDataGeneratoraAPI.Endpoints\SQLDataGeneratorAPI.Endpoints.csproj", "{79FF4342-AE68-4C9E-8AF0-06F1D832129F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLDataGeneratorAPI.DataAccess", "SQLDataGeneratorAPI.DataAccess\SQLDataGeneratorAPI.DataAccess.csproj", "{95DA3667-D58A-4214-A63D-667C5425D95B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLDataGeneratorAPI.DataAccess", "SQLDataGeneratorAPI.DataAccess\SQLDataGeneratorAPI.DataAccess.csproj", "{95DA3667-D58A-4214-A63D-667C5425D95B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

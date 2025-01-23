@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SqlDataGenerator.Abstract
+namespace SqlDataGenerator.Abstract.DependencyInjection
 {
     public interface IGenderGeneration
     {
-        Task<BusinessLogicResponse> GenerateGender(int? records);
+        Task<BusinessLogicResponse> GenerateGender(Record records);
     }
 }

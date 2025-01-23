@@ -1,4 +1,5 @@
-﻿using SqlDataGenerator.Abstract;
+﻿using SqlDataGenerator.Abstract.DependencyInjection;
+using SqlDataGenerator.Logic.GenerationUtils;
 using SqlDataGenerator.Models;
 using System;
 using System.Collections.Concurrent;
@@ -6,13 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SqlDataGenerator.Logic
+namespace SqlDataGenerator.Logic.GenerationLogic
 {
     public class GenderGeneration : IGenderGeneration
     {
-        public async Task<BusinessLogicResponse> GenerateGender(int? records)
+        public async Task<BusinessLogicResponse> GenerateGender(Record records)
         {
-            
+
             try
             {
                 var random = new Random();
@@ -27,7 +28,7 @@ namespace SqlDataGenerator.Logic
                 var gendersList = new ConcurrentBag<object>();
 
                 await Task.WhenAll(
-                    Enumerable.Range(0, records.Value).Select(async _ =>
+                    Enumerable.Range(0, records.Records).Select(async _ =>
                     {
                         var pickedGender = RandomDataGeneration.PickRandomData(genders, random);
                         gendersList.Add(new { gender = pickedGender });

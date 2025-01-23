@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SqlDataGenerator.Abstract;
+using Microsoft.AspNetCore.WebUtilities;
+using SqlDataGenerator.Abstract.DependencyInjection;
 using SqlDataGenerator.Logic;
 using SqlDataGenerator.Models;
 using SqlDataGeneratorAPI.Endpoints.Endpoints;
@@ -16,25 +17,25 @@ namespace SqlDataGenerator.Endpoints
             var group = routes.MapGroup("/api/id_generation").WithTags("ID Generation");
 
             group.MapGet("/generate_id", async (
-                IIdGeneration idGeneration,
-                [FromHeader] int? records,
+                [FromServices] IIdGeneration idGeneration,
+                [FromServices] Record record,
                 [FromHeader] int? lenght,
-                [FromHeader] bool? is_integer = false,
+                [FromHeader] int? records,
                 [FromHeader] bool? has_letters = false) =>
-            {
-                var valiteRecords = RecordsValidator.ValidateRecords(records);
+        {
+                record.Records = records.HasValue ? records.Value: 0;
+                var valiteRecords = record.ValidateRecords();
                 if (valiteRecords.StatusCode != 200)
                 {
                     return Results.Json(new { Message = valiteRecords.Message }, statusCode: valiteRecords.StatusCode);
                 }
+                if (lenght > 40)
+                {
+                    return Results.BadRequest(new { Message = "Length can't be greater than 40" });
+                }
                 if (lenght == null)
                 {
                     return Results.BadRequest(new { Message = "Length is required" });
-                }
-
-                if (has_letters!.Value && is_integer!.Value)
-                {
-                    return Results.BadRequest(new { Message = "Records can't be casted as integer when they have letters" });
                 }
                 if (lenght.Value < 6)
                 {
@@ -50,7 +51,6 @@ namespace SqlDataGenerator.Endpoints
                 IdNumberConfig idNumberConfig = new IdNumberConfig(
                     records.Value,
                     lenght.Value,
-                    is_integer!.Value,
                     has_letters.Value
                 );
                 var result = await idGeneration.GenerateIds(idNumberConfig);

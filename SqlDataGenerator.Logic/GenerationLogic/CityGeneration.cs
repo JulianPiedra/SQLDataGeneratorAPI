@@ -1,11 +1,11 @@
-﻿using SqlDataGenerator.Abstract;
-using SqlDataGenerator.Models;
+﻿using SqlDataGenerator.Models;
 using System.Text;
 using System.Collections.Concurrent;
 using SQLDataGeneratorAPI.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
+using SqlDataGenerator.Abstract.DependencyInjection;
 
-namespace SqlDataGenerator.Logic
+namespace SqlDataGenerator.Logic.GenerationLogic
 {
     public class CityGeneration : ICityGeneration
     {
@@ -16,12 +16,12 @@ namespace SqlDataGenerator.Logic
             Context = context;
             FetchFromDatabase = fetchFromDatabase;
         }
-        public async Task<BusinessLogicResponse> GenerateCity(int? records)
+        public async Task<BusinessLogicResponse> GenerateCity(Record records)
         {
             try
             {
-                var randomCountries = await FetchFromDatabase.FetchObjectListFromDatabase<City>(
-                                            records,
+                var randomCountries = await FetchFromDatabase.FetchObjectListFromDatabase(
+                                            records.Records,
                                             "city",
                                             Context.City,
                                             f => f.CityName);
@@ -33,7 +33,7 @@ namespace SqlDataGenerator.Logic
                 return new BusinessLogicResponse { StatusCode = 500, Message = ex.Message };
             }
         }
-       
+
 
 
     }

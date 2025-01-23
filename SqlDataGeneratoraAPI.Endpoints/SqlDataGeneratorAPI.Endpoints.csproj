@@ -18,9 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SqlDataGenerator.Abstract\SqlDataGenerator.Abstract.csproj" />
-    <ProjectReference Include="..\SqlDataGenerator.Logic\SqlDataGenerator.Logic.csproj" />
-    <ProjectReference Include="..\SqlDataGenerator.Models\SqlDataGenerator.Models.csproj" />
+    <ProjectReference Include="..\SqlDataGenerator.Abstract\SQLDataGenerator.Abstract.csproj" />
+    <ProjectReference Include="..\SqlDataGenerator.Logic\SQLDataGenerator.Logic.csproj" />
+    <ProjectReference Include="..\SqlDataGenerator.Models\SQLDataGenerator.Models.csproj" />
     <ProjectReference Include="..\SQLDataGeneratorAPI.DataAccess\SQLDataGeneratorAPI.DataAccess.csproj" />
   </ItemGroup>
 

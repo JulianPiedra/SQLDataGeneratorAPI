@@ -1,6 +1,6 @@
 ﻿using SqlDataGenerator.Models;
 
-namespace SqlDataGenerator.Abstract
+namespace SqlDataGenerator.Abstract.DependencyInjection
 {
     public interface IIdGeneration
     {

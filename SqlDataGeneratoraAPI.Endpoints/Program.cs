@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using SqlDataGenerator.Abstract;
 using SqlDataGenerator.Endpoints;
-using SqlDataGenerator.Logic;
 using SQLDataGeneratorAPI.DataAccess.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using static System.Net.WebRequestMethods;
 using SqlDataGeneratorAPI.Endpoints.Endpoints;
+using SqlDataGenerator.Logic.GenerationLogic;
+using SqlDataGenerator.Abstract.DependencyInjection;
+using SqlDataGenerator.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SQLGeneratorContext>(options =>
@@ -48,7 +49,7 @@ builder.Services.AddScoped<ICountryGeneration, CountryGeneration>();
 builder.Services.AddScoped<ICityGeneration, CityGeneration>();
 builder.Services.AddScoped<IGenderGeneration, GenderGeneration>();
 builder.Services.AddScoped<IEmailGeneration, EmailGeneration>();
-//builder.Services.AddScoped<RandomDataGeneration>();
+builder.Services.AddScoped<Record>();
 builder.Services.AddScoped<FetchFromDatabase>();
 
 

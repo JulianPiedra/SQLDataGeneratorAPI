@@ -7,7 +7,7 @@ using static Azure.Core.HttpHeader;
 using NuGet.Packaging;
 using SqlDataGenerator.Logic;
 using SqlDataGenerator.Models;
-using SqlDataGenerator.Abstract;
+using SqlDataGenerator.Abstract.DependencyInjection;
 namespace SqlDataGeneratorAPI.Endpoints.Endpoints;
 
 public static class NameGenerationEndpoints
@@ -17,17 +17,18 @@ public static class NameGenerationEndpoints
         var group = routes.MapGroup("/api/name_generation").WithTags("Name Generation");
 
         group.MapGet("/generate_whole_name", async (
-            SQLGeneratorContext db,
-            INameGeneration nameGeneration, 
+            [FromServices] INameGeneration nameGeneration,
+            [FromServices] Record record,
             [FromHeader] int? records) =>
         {
-            var valiteRecords = RecordsValidator.ValidateRecords(records);
+                record.Records = records.HasValue ? records.Value: 0;
+            var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {
                 return Results.Json(new { Message = valiteRecords.Message }, statusCode: valiteRecords.StatusCode);
             }
 
-            var result = await nameGeneration.GenerateWholeNames(records);
+            var result = await nameGeneration.GenerateWholeNames(record);
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),
@@ -38,16 +39,17 @@ public static class NameGenerationEndpoints
         .WithOpenApi();
 
         group.MapGet("/generate_first_name", async (
-            SQLGeneratorContext db,
-            INameGeneration nameGeneration,
+            [FromServices] INameGeneration nameGeneration,
+            [FromServices] Record record,
             [FromHeader] int? records) =>
         {
-            var valiteRecords = RecordsValidator.ValidateRecords(records);
+                record.Records = records.HasValue ? records.Value: 0;
+            var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {
                 return Results.Json(new { Message = valiteRecords.Message }, statusCode: valiteRecords.StatusCode);
             }
-            var result = await nameGeneration.GenerateFirstNames(records);
+            var result = await nameGeneration.GenerateFirstNames(record);
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),
@@ -58,16 +60,17 @@ public static class NameGenerationEndpoints
         .WithOpenApi();
 
         group.MapGet("/generate_last_name", async (
-            SQLGeneratorContext db,
-            INameGeneration nameGeneration,
+            [FromServices] INameGeneration nameGeneration,
+            [FromServices] Record record,
             [FromHeader] int? records) =>
         {
-            var valiteRecords = RecordsValidator.ValidateRecords(records);
+                record.Records = records.HasValue ? records.Value: 0;
+            var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {
                 return Results.Json(new { Message = valiteRecords.Message }, statusCode: valiteRecords.StatusCode);
             }
-            var result = await nameGeneration.GenerateLastNames(records);
+            var result = await nameGeneration.GenerateLastNames(record);
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),

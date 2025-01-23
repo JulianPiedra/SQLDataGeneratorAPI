@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OpenApi;
 using SQLDataGeneratorAPI.DataAccess.Models;
-using SqlDataGenerator.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using SqlDataGenerator.Logic;
+using SqlDataGenerator.Models;
+using SqlDataGenerator.Abstract.DependencyInjection;
 namespace SqlDataGeneratorAPI.Endpoints.Endpoints;
 
 public static class CountryGenerationEndpoints
@@ -14,17 +15,18 @@ public static class CountryGenerationEndpoints
         var group = routes.MapGroup("/api/country_generation").WithTags("Country Generation");
 
         group.MapGet("/generate_country", async (
-            SQLGeneratorContext db,
-            ICountryGeneration countryGeneration,
+            [FromServices] ICountryGeneration countryGeneration,
+            [FromServices] Record record,
             [FromHeader] int? records) =>
         {
-            var valiteRecords = RecordsValidator.ValidateRecords(records);
+                record.Records = records.HasValue ? records.Value: 0;
+            var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {
                 return Results.Json(new { Message = valiteRecords.Message}, statusCode:valiteRecords.StatusCode );
             }   
 
-            var result = await countryGeneration.GenerateCountry(records);
+            var result = await countryGeneration.GenerateCountry(record);
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),
@@ -35,17 +37,18 @@ public static class CountryGenerationEndpoints
         .WithOpenApi();
 
         group.MapGet("/generate_alpha_code", async (
-            SQLGeneratorContext db,
-            ICountryGeneration countryGeneration,
+            [FromServices] ICountryGeneration countryGeneration,
+            [FromServices] Record record,
             [FromHeader] int? records) =>
         {
-            var valiteRecords = RecordsValidator.ValidateRecords(records);
+                record.Records = records.HasValue ? records.Value: 0;
+            var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {
                 return Results.Json(new { Message = valiteRecords.Message }, statusCode: valiteRecords.StatusCode);
             }
 
-            var result = await countryGeneration.GenerateAlphaCode(records);
+            var result = await countryGeneration.GenerateAlphaCode(record);
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),
@@ -56,17 +59,18 @@ public static class CountryGenerationEndpoints
         .WithOpenApi();
 
         group.MapGet("/generate_numeric_code", async (
-            SQLGeneratorContext db,
-            ICountryGeneration countryGeneration,
+            [FromServices] ICountryGeneration countryGeneration,
+            [FromServices] Record record,
             [FromHeader] int? records) =>
         {
-            var valiteRecords = RecordsValidator.ValidateRecords(records);
+                record.Records = records.HasValue ? records.Value: 0;
+            var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {
                 return Results.Json(new { Message = valiteRecords.Message }, statusCode: valiteRecords.StatusCode);
             }
 
-            var result = await countryGeneration.GenerateNumericCode(records);
+            var result = await countryGeneration.GenerateNumericCode(record);
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),

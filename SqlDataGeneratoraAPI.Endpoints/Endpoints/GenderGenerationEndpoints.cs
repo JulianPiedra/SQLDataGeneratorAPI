@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OpenApi;
 using SQLDataGeneratorAPI.DataAccess.Models;
-using SqlDataGenerator.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using SqlDataGenerator.Logic;
+using SqlDataGenerator.Models;
+using SqlDataGenerator.Abstract.DependencyInjection;
 namespace SqlDataGeneratorAPI.Endpoints.Endpoints;
 
 public static class GenderGenerationEndpoints
@@ -14,16 +15,18 @@ public static class GenderGenerationEndpoints
         var group = routes.MapGroup("/api/gender_generation").WithTags("Gender Generation");
 
         group.MapGet("/generate_gender", async (
-            IGenderGeneration genderGeneration,
+            [FromServices] IGenderGeneration genderGeneration,
+            [FromServices] Record record,
             [FromHeader] int? records) =>
         {
-            var valiteRecords = RecordsValidator.ValidateRecords(records);
+                record.Records = records.HasValue ? records.Value: 0;
+            var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {
                 return Results.Json(new { Message = valiteRecords.Message }, statusCode: valiteRecords.StatusCode);
             }
 
-            var result = await genderGeneration.GenerateGender(records);
+            var result = await genderGeneration.GenerateGender(record);
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),

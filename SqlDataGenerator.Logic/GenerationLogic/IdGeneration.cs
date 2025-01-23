@@ -1,9 +1,11 @@
-﻿using SqlDataGenerator.Abstract;
-using SqlDataGenerator.Models;
+﻿using SqlDataGenerator.Models;
 using System.Text;
 using System.Collections.Concurrent;
+using SqlDataGenerator.Logic.GenerationUtils;
+using SqlDataGenerator.Abstract.DependencyInjection;
+using System.Numerics;
 
-namespace SqlDataGenerator.Logic
+namespace SqlDataGenerator.Logic.GenerationLogic
 {
     public class IdGeneration : IIdGeneration
     {
@@ -20,7 +22,7 @@ namespace SqlDataGenerator.Logic
 
                 var uniqueIds = new ConcurrentBag<IdNumber>();  // Thread-safe collection
                 var generatedIds = new HashSet<string>(); // To ensure no duplicates
-                
+
 
                 // Use Parallel.For to generate IDs concurrently for large numbers of records
                 await Task.WhenAll(
@@ -31,9 +33,12 @@ namespace SqlDataGenerator.Logic
                         do
                         {
                             generatedId = RandomDataGeneration.GenerateRandomData(idNumberConfig.Lenght, allowedChars, random);
-                        } while (!generatedIds.Add(generatedId));  // Ensure uniqueness
+                        } while (!generatedIds.Add(generatedId));  // Ensure uniqueness                      
 
-                        uniqueIds.Add(new IdNumber { Id = idNumberConfig.IsInteger ? Int64.Parse(generatedId) : generatedId });
+                        uniqueIds.Add(new IdNumber
+                        {
+                            Id =  generatedId
+                        });
                     })
                 );
 
@@ -50,6 +55,6 @@ namespace SqlDataGenerator.Logic
             }
         }
 
-        
+
     }
 }
