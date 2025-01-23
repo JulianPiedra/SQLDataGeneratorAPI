@@ -47,6 +47,7 @@ builder.Services.AddScoped<INameGeneration, NameGeneration>();
 builder.Services.AddScoped<ICountryGeneration, CountryGeneration>();
 builder.Services.AddScoped<ICityGeneration, CityGeneration>();
 builder.Services.AddScoped<IGenderGeneration, GenderGeneration>();
+builder.Services.AddScoped<IEmailGeneration, EmailGeneration>();
 //builder.Services.AddScoped<RandomDataGeneration>();
 builder.Services.AddScoped<FetchFromDatabase>();
 
@@ -80,6 +81,7 @@ app.MapCountryGenerationEndpoints();
 app.MapNameGenerationEndpoints();
 app.MapCityGenerationEndpoints();
 app.MapGenderGenerationEndpoints();
+app.MapEmailGenerationEndpoints();
 app.Run();
 
 

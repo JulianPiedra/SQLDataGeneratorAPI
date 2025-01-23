@@ -12,15 +12,7 @@ namespace SqlDataGenerator.Logic
     {
         public async Task<BusinessLogicResponse> GenerateGender(int? records)
         {
-            if (records == null || records <= 0)
-            {
-                return new BusinessLogicResponse
-                {
-                    StatusCode = 400,
-                    ObjectResponse = "Invalid number of records."
-                };
-            }
-
+            
             try
             {
                 var random = new Random();

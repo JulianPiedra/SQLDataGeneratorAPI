@@ -23,6 +23,8 @@ public partial class SQLGeneratorContext : DbContext
 
     public virtual DbSet<City> City { get; set; }
 
+    public virtual DbSet<Email> Email { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=DefaultConnection");
 
@@ -56,7 +58,7 @@ public partial class SQLGeneratorContext : DbContext
 
         modelBuilder.Entity<LastName>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.LastName1);
 
             entity.Property(e => e.LastName1)
                 .HasMaxLength(20)
@@ -73,7 +75,15 @@ public partial class SQLGeneratorContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("CityName");
         });
+        modelBuilder.Entity<Email>(entity =>
+        {
+            entity.HasKey(e => e.EmailExtension);
 
+            entity.Property(e => e.EmailExtension)
+                .HasMaxLength(40)
+                .IsUnicode(false)
+                .HasColumnName("EmailExtension");
+        });
         OnModelCreatingPartial(modelBuilder);
     }
 
