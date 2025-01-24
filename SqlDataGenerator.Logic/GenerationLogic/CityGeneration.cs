@@ -4,17 +4,16 @@ using System.Collections.Concurrent;
 using SQLDataGeneratorAPI.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using SqlDataGenerator.Abstract.DependencyInjection;
+using SqlDataGenerator.Logic.GenerationUtils;
 
 namespace SqlDataGenerator.Logic.GenerationLogic
 {
     public class CityGeneration : ICityGeneration
     {
         private readonly SQLGeneratorContext Context;
-        private readonly FetchFromDatabase FetchFromDatabase;
-        public CityGeneration(SQLGeneratorContext context, FetchFromDatabase fetchFromDatabase)
+        public CityGeneration(SQLGeneratorContext context)
         {
             Context = context;
-            FetchFromDatabase = fetchFromDatabase;
         }
         public async Task<BusinessLogicResponse> GenerateCity(Record records)
         {

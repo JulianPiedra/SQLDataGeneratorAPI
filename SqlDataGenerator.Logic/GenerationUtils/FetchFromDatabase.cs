@@ -7,11 +7,11 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SQLDataGeneratorAPI.DataAccess.Models
+namespace SqlDataGenerator.Logic.GenerationUtils
 {
-    public class FetchFromDatabase
+    public static class FetchFromDatabase
     {
-        public async Task<List<object>> FetchObjectListFromDatabase<TEntity>(
+        public static async Task<List<object>> FetchObjectListFromDatabase<TEntity>(
             int? records,
             string objectIdentifier,
             DbSet<TEntity> dbSet,
@@ -49,7 +49,7 @@ namespace SQLDataGeneratorAPI.DataAccess.Models
             // Return the formatted result
             return formatedResult;
         }
-        public async Task<List<string>> FetchStringListFromDatabase<TEntity>(
+        public static async Task<List<string>> FetchStringListFromDatabase<TEntity>(
            int? records,
            DbSet<TEntity> dbSet,
            Expression<Func<TEntity, string>> selector)

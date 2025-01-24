@@ -17,10 +17,9 @@ public static class CityGenerationEndpoints
 
         group.MapGet("/generate_city", async (
             [FromServices] ICityGeneration cityGeneration,
-            [FromServices] Record record,
             [FromHeader] int? records) =>
         {
-                record.Records = records.HasValue ? records.Value: 0;
+            Record record = new Record(records.HasValue ? records.Value : 0);
             var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {

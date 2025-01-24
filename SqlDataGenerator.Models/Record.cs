@@ -9,7 +9,14 @@ namespace SqlDataGenerator.Models
     public class Record
     {
         public int Records { get; set; }
-     
+        public Record()
+        {
+        }
+        public Record(int records)
+        {
+            Records = records;
+        }
+
         public BusinessLogicResponse ValidateRecords()
         {
 

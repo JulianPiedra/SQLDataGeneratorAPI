@@ -5,22 +5,23 @@ using SQLDataGeneratorAPI.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SqlDataGenerator.Abstract.DependencyInjection;
+using SqlDataGenerator.Logic.GenerationUtils;
 
 namespace SqlDataGenerator.Logic.GenerationLogic
 {
     public class NameGeneration : INameGeneration
     {
         private readonly SQLGeneratorContext Context;
-        private readonly FetchFromDatabase FetchFromDatabase;
-        public NameGeneration(SQLGeneratorContext context, FetchFromDatabase fetchFromDatabase)
+        public NameGeneration(SQLGeneratorContext context)
         {
             Context = context;
-            FetchFromDatabase = fetchFromDatabase;
         }
         public async Task<BusinessLogicResponse> GenerateWholeNames(Record records)
         {
+
             try
             {
+
                 // Start the tasks concurrently with their own DbContext instance
                 var randomFirstNames = await FetchFromDatabase.FetchStringListFromDatabase(
                             records.Records,
@@ -49,8 +50,10 @@ namespace SqlDataGenerator.Logic.GenerationLogic
         }
         public async Task<BusinessLogicResponse> GenerateFirstNames(Record records)
         {
+
             try
             {
+
                 var randomFirstNames = await FetchFromDatabase.FetchObjectListFromDatabase(
                                             records.Records,
                                             "first_name",
@@ -68,6 +71,7 @@ namespace SqlDataGenerator.Logic.GenerationLogic
         {
             try
             {
+
                 var randomLastNames = await FetchFromDatabase.FetchObjectListFromDatabase(
                                             records.Records,
                                             "last_name",
@@ -79,6 +83,8 @@ namespace SqlDataGenerator.Logic.GenerationLogic
             {
                 return new BusinessLogicResponse { StatusCode = 500, Message = ex.Message };
             }
+
+
         }
 
 

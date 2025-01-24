@@ -4,17 +4,16 @@ using System.Collections.Concurrent;
 using SQLDataGeneratorAPI.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using SqlDataGenerator.Abstract.DependencyInjection;
+using SqlDataGenerator.Logic.GenerationUtils;
 
 namespace SqlDataGenerator.Logic.GenerationLogic
 {
     public class CountryGeneration : ICountryGeneration
     {
         private readonly SQLGeneratorContext Context;
-        private readonly FetchFromDatabase FetchFromDatabase;
-        public CountryGeneration(SQLGeneratorContext context, FetchFromDatabase fetchFromDatabase)
+        public CountryGeneration(SQLGeneratorContext context)
         {
             Context = context;
-            FetchFromDatabase = fetchFromDatabase;
         }
         public async Task<BusinessLogicResponse> GenerateCountry(Record records)
         {

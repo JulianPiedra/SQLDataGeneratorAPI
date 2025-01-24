@@ -1,4 +1,5 @@
 ﻿using SqlDataGenerator.Abstract.DependencyInjection;
+using SqlDataGenerator.Logic.GenerationUtils;
 using SqlDataGenerator.Models;
 using SQLDataGeneratorAPI.DataAccess.Models;
 using System;
@@ -13,20 +14,15 @@ namespace SqlDataGenerator.Logic.GenerationLogic
     public class EmailGeneration : IEmailGeneration
     {
         private readonly SQLGeneratorContext Context;
-        private readonly FetchFromDatabase FetchFromDatabase;
-        public EmailGeneration(SQLGeneratorContext context, FetchFromDatabase fetchFromDatabase)
+        public EmailGeneration(SQLGeneratorContext context)
         {
             Context = context;
-            FetchFromDatabase = fetchFromDatabase;
         }
         public async Task<BusinessLogicResponse> GenerateEmail(Record records)
         {
 
             try
             {
-                var random = new Random();
-                var allowedChars = "0123456789";
-
                 // Start the tasks concurrently with their own DbContext instance
                 var randomNames = await FetchFromDatabase.FetchStringListFromDatabase(
                             records.Records,
@@ -43,13 +39,14 @@ namespace SqlDataGenerator.Logic.GenerationLogic
                             Context.Email,
                             f => f.EmailExtension);
 
+                var random = new Random();
 
                 // Combine the results of both tasks
                 var result = randomNames
                 .Zip(randomLastNames, (firstName, lastName) => new { FirstName = firstName.ToLower(), LastName = lastName.ToLower() })
                 .Zip(randomEmailExtension, (combined, emailExtension) => new
                 {
-                    Email = $"{combined.FirstName}{combined.LastName}{random.Next(999)}{emailExtension}"
+                    Email = $"{combined.FirstName}{combined.LastName}{RandomDataGeneration.GenerateRandomNumber(999,random)}{emailExtension}"
                 }).ToList();
 
 

@@ -18,10 +18,9 @@ public static class NameGenerationEndpoints
 
         group.MapGet("/generate_whole_name", async (
             [FromServices] INameGeneration nameGeneration,
-            [FromServices] Record record,
             [FromHeader] int? records) =>
         {
-                record.Records = records.HasValue ? records.Value: 0;
+            Record record = new Record(records.HasValue ? records.Value : 0);
             var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {
@@ -40,10 +39,9 @@ public static class NameGenerationEndpoints
 
         group.MapGet("/generate_first_name", async (
             [FromServices] INameGeneration nameGeneration,
-            [FromServices] Record record,
             [FromHeader] int? records) =>
         {
-                record.Records = records.HasValue ? records.Value: 0;
+            Record record = new Record(records.HasValue ? records.Value : 0);
             var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {
@@ -61,10 +59,9 @@ public static class NameGenerationEndpoints
 
         group.MapGet("/generate_last_name", async (
             [FromServices] INameGeneration nameGeneration,
-            [FromServices] Record record,
             [FromHeader] int? records) =>
         {
-                record.Records = records.HasValue ? records.Value: 0;
+            Record record = new Record(records.HasValue ? records.Value : 0);
             var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {

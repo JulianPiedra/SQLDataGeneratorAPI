@@ -9,36 +9,28 @@ using System.Threading.Tasks;
 
 namespace SqlDataGenerator.Logic.GenerationLogic
 {
-    public class GenderGeneration : IGenderGeneration
+    public class DateGeneration : IDateGeneration
     {
-        public async Task<BusinessLogicResponse> GenerateGender(Record records)
+        public async Task<BusinessLogicResponse> GenerateDate(DateConfig dateConfig)
         {
 
             try
             {
                 var random = new Random();
-                var genders = new List<string>
-                {
-                    "Male",
-                    "Female",
-                    "Other",
-                    "Prefer not to say"
-                };
-
-                var gendersList = new ConcurrentBag<object>();
+                var dateList = new ConcurrentBag<object>();
 
                 await Task.WhenAll(
-                    Enumerable.Range(0, records.Records).Select(async _ =>
+                    Enumerable.Range(0, dateConfig.Records).Select(async _ =>
                     {
-                        var pickedGender = RandomDataGeneration.PickRandomData(genders, random);
-                        gendersList.Add(new { gender = pickedGender });
+                        var pickedDate = RandomDataGeneration.GenerateRandomDate(dateConfig.MinDate, dateConfig.MaxDate, dateConfig.IncludeTime, random);
+                        dateList.Add(new { date = pickedDate });
                     })
                 );
 
                 return new BusinessLogicResponse
                 {
-                    StatusCode = 200, 
-                    ObjectResponse = gendersList.ToList()
+                    StatusCode = 200,
+                    ObjectResponse = dateList.ToList()
                 };
             }
             catch (Exception ex)

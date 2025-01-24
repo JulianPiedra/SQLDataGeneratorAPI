@@ -16,15 +16,14 @@ public static class CountryGenerationEndpoints
 
         group.MapGet("/generate_country", async (
             [FromServices] ICountryGeneration countryGeneration,
-            [FromServices] Record record,
             [FromHeader] int? records) =>
         {
-                record.Records = records.HasValue ? records.Value: 0;
+            Record record = new Record(records.HasValue ? records.Value : 0);
             var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {
-                return Results.Json(new { Message = valiteRecords.Message}, statusCode:valiteRecords.StatusCode );
-            }   
+                return Results.Json(new { Message = valiteRecords.Message }, statusCode: valiteRecords.StatusCode);
+            }
 
             var result = await countryGeneration.GenerateCountry(record);
             return result.StatusCode switch
@@ -38,10 +37,9 @@ public static class CountryGenerationEndpoints
 
         group.MapGet("/generate_alpha_code", async (
             [FromServices] ICountryGeneration countryGeneration,
-            [FromServices] Record record,
             [FromHeader] int? records) =>
         {
-                record.Records = records.HasValue ? records.Value: 0;
+            Record record = new Record(records.HasValue ? records.Value : 0);
             var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {
@@ -60,10 +58,9 @@ public static class CountryGenerationEndpoints
 
         group.MapGet("/generate_numeric_code", async (
             [FromServices] ICountryGeneration countryGeneration,
-            [FromServices] Record record,
             [FromHeader] int? records) =>
         {
-                record.Records = records.HasValue ? records.Value: 0;
+            Record record = new Record(records.HasValue ? records.Value : 0);
             var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {

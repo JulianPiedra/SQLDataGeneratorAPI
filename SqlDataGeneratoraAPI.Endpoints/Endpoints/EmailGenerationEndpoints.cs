@@ -16,10 +16,9 @@ public static class EmailGenerationEndpoints
 
         group.MapGet("/generate_email", async (
             [FromServices] IEmailGeneration emailGeneration,
-            [FromServices] Record record,
             [FromHeader] int? records) =>
         {
-                record.Records = records.HasValue ? records.Value: 0;
+            Record record = new Record(records.HasValue ? records.Value : 0);
             var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {

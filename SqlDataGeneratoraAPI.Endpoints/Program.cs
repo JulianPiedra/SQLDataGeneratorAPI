@@ -49,8 +49,7 @@ builder.Services.AddScoped<ICountryGeneration, CountryGeneration>();
 builder.Services.AddScoped<ICityGeneration, CityGeneration>();
 builder.Services.AddScoped<IGenderGeneration, GenderGeneration>();
 builder.Services.AddScoped<IEmailGeneration, EmailGeneration>();
-builder.Services.AddScoped<Record>();
-builder.Services.AddScoped<FetchFromDatabase>();
+builder.Services.AddScoped<IDateGeneration, DateGeneration>();
 
 
 builder.Services.AddAuthentication("ApiKey")
@@ -83,6 +82,7 @@ app.MapNameGenerationEndpoints();
 app.MapCityGenerationEndpoints();
 app.MapGenderGenerationEndpoints();
 app.MapEmailGenerationEndpoints();
+app.MapDateGenerationEndpoints();
 app.Run();
 
 
