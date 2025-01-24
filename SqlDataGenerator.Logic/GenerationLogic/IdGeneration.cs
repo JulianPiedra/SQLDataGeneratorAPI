@@ -13,7 +13,7 @@ namespace SqlDataGenerator.Logic.GenerationLogic
         {
             try
             {
-                var random = new Random();
+                var random = new ThreadLocal<Random>(() => new Random(Guid.NewGuid().GetHashCode()));
                 var allowedChars = "0123456789";
                 if (idNumberConfig.HasLetters)
                 {
@@ -32,7 +32,7 @@ namespace SqlDataGenerator.Logic.GenerationLogic
                         string generatedId;
                         do
                         {
-                            generatedId = RandomDataGeneration.GenerateRandomData(idNumberConfig.Lenght, allowedChars, random);
+                            generatedId = RandomDataGeneration.GenerateRandomData(idNumberConfig.Length, allowedChars, random.Value, false);
                         } while (!generatedIds.Add(generatedId));  // Ensure uniqueness                      
 
                         uniqueIds.Add(new IdNumber

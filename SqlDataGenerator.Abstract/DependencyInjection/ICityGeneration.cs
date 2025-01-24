@@ -2,9 +2,9 @@
 
 namespace SqlDataGenerator.Abstract.DependencyInjection
 {
-    public interface ICityGeneration
+    public interface ITelephoneGeneration
     {
-        Task<BusinessLogicResponse> GenerateCity(Record records);
+        Task<BusinessLogicResponse> GenerateTelephone(TelephoneConfig telephoneConfig);
 
     }
 }

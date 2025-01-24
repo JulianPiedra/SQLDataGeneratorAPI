@@ -16,13 +16,13 @@ namespace SqlDataGenerator.Logic.GenerationLogic
 
             try
             {
-                var random = new Random();
+                var random = new ThreadLocal<Random>(() => new Random(Guid.NewGuid().GetHashCode()));
                 var dateList = new ConcurrentBag<object>();
 
                 await Task.WhenAll(
                     Enumerable.Range(0, dateConfig.Records).Select(async _ =>
                     {
-                        var pickedDate = RandomDataGeneration.GenerateRandomDate(dateConfig.MinDate, dateConfig.MaxDate, dateConfig.IncludeTime, random);
+                        var pickedDate = RandomDataGeneration.GenerateRandomDate(dateConfig.MinDate, dateConfig.MaxDate, dateConfig.IncludeTime, random.Value);
                         dateList.Add(new { date = pickedDate });
                     })
                 );

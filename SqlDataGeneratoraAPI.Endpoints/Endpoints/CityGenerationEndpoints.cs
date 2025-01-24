@@ -30,7 +30,7 @@ public static class CityGenerationEndpoints
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),
-                _ => Results.Json(result.Message, statusCode: result.StatusCode)
+                _ => Results.Json(new { Message= result.Message }, statusCode: result.StatusCode)
             };
         })
         .WithName("GetCity")

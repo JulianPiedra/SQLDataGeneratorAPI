@@ -31,7 +31,7 @@ public static class NameGenerationEndpoints
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),
-                _ => Results.Json(result.Message, statusCode: result.StatusCode)
+                _ => Results.Json(new { Message= result.Message }, statusCode: result.StatusCode)
             };
         })
         .WithName("GetWholeNames")
@@ -51,7 +51,7 @@ public static class NameGenerationEndpoints
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),
-                _ => Results.Json(result.Message, statusCode: result.StatusCode)
+                _ => Results.Json(new { Message= result.Message }, statusCode: result.StatusCode)
             };
         })
         .WithName("GetFirstNames")
@@ -71,7 +71,7 @@ public static class NameGenerationEndpoints
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),
-                _ => Results.Json(result.Message, statusCode: result.StatusCode)
+                _ => Results.Json(new { Message= result.Message }, statusCode: result.StatusCode)
             };
         })
         .WithName("GetLastNames")

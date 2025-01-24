@@ -16,7 +16,7 @@ namespace SqlDataGenerator.Logic.GenerationLogic
 
             try
             {
-                var random = new Random();
+                var random = new ThreadLocal<Random>(() => new Random(Guid.NewGuid().GetHashCode()));
                 var genders = new List<string>
                 {
                     "Male",
@@ -30,7 +30,7 @@ namespace SqlDataGenerator.Logic.GenerationLogic
                 await Task.WhenAll(
                     Enumerable.Range(0, records.Records).Select(async _ =>
                     {
-                        var pickedGender = RandomDataGeneration.PickRandomData(genders, random);
+                        var pickedGender = RandomDataGeneration.PickRandomData(genders, random.Value);
                         gendersList.Add(new { gender = pickedGender });
                     })
                 );

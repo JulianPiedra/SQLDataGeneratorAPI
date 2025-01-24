@@ -4,12 +4,12 @@ namespace SqlDataGenerator.Models
 {
     public class IdNumberConfig : Record
     {
-        public int Lenght { get; set; }
+        public int Length { get; set; }
         public bool HasLetters { get; set; }
-        public IdNumberConfig(int records, int lenght, bool hasLetters)
+        public IdNumberConfig(int records, int length, bool hasLetters)
         {
             Records = records;
-            Lenght = lenght;
+            Length = length;
             HasLetters = hasLetters;
         }
     }

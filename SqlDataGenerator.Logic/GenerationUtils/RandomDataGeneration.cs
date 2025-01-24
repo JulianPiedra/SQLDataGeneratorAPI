@@ -8,29 +8,63 @@ namespace SqlDataGenerator.Logic.GenerationUtils
 {
     public static class RandomDataGeneration
     {
-        public static string GenerateRandomData(int length, string allowedChars, Random random)
+        public static string GenerateRandomData(int length, string allowedChars, Random random, bool? startWithZero = false)
         {
-            // Use StringBuilder to construct the ID efficiently
-            var stringBuilder = new StringBuilder(length);
+            try
+            { // Use StringBuilder to construct the ID efficiently
+                var stringBuilder = new StringBuilder(length);
+                if (!startWithZero.Value)
+                    for (int i = 0; i < length; i++)
+                    {
+                        stringBuilder.Append(allowedChars[random.Next(allowedChars.Length)]);
+                    }
+                else
+                {
+                    for (int i = 0; i < length; i++)
+                    {
+                        if (i != 0) stringBuilder.Append(allowedChars[random.Next(allowedChars.Length)]);
+                        else
+                        {
+                            stringBuilder.Append(allowedChars.Substring(1)[random.Next(allowedChars.Length-1)]);
+                        }
+                    }
+                }
 
-            for (int i = 0; i < length; i++)
-            {
-                stringBuilder.Append(allowedChars[random.Next(allowedChars.Length)]);
+                return stringBuilder.ToString();
             }
-
-            return stringBuilder.ToString();
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
+       
 
         public static int GenerateRandomNumber(int minLength, int maxLength, Random random)
         {
-            var randomInt = random.Next(minLength, maxLength);
+            try
+            {
+                var randomInt = random.Next(minLength, maxLength);
 
-            return randomInt;
+                return randomInt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
         public static int GenerateRandomNumber(int maxLength, Random random)
         {
-            var randomInt = random.Next(maxLength);
-            return randomInt;
+            try
+            {
+                var randomInt = random.Next(maxLength);
+                return randomInt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
 
         public static dynamic GenerateRandomDate(DateTime? minDate, DateTime? maxDate, bool includeTime, Random random)
@@ -53,15 +87,23 @@ namespace SqlDataGenerator.Logic.GenerationUtils
 
                 return !includeTime ? randomDate.ToString("yyyy-MM-dd") : randomDate;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return e.Message;
+                throw new Exception(ex.Message);
             }
         }
         public static string PickRandomData(List<string> itemList, Random random)
         {
-            var item = itemList[random.Next(itemList.Count)];
-            return item;
+            try
+            {
+                var item = itemList[random.Next(itemList.Count)];
+                return item;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
     }
 }
