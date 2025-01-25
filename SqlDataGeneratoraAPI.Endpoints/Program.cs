@@ -51,6 +51,7 @@ builder.Services.AddScoped<IGenderGeneration, GenderGeneration>();
 builder.Services.AddScoped<IEmailGeneration, EmailGeneration>();
 builder.Services.AddScoped<IDateGeneration, DateGeneration>();
 builder.Services.AddScoped<ITelephoneGeneration, TelephoneGeneration>();
+builder.Services.AddScoped<INumberGeneration, NumberGeneration>();
 
 builder.Services.AddAuthentication("ApiKey")
     .AddScheme<ApiKeyAuthenticationSchemeOptions, ApiKeyAuthenticationSchemeHandler>(
@@ -84,6 +85,7 @@ app.MapGenderGenerationEndpoints();
 app.MapEmailGenerationEndpoints();
 app.MapDateGenerationEndpoints();
 app.MapTelephoneGenerationEndpoints();
+app.MapNumberGenerationEndpoints();
 app.Run();
 
 

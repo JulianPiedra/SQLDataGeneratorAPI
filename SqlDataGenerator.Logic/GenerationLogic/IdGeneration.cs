@@ -32,7 +32,7 @@ namespace SqlDataGenerator.Logic.GenerationLogic
                         string generatedId;
                         do
                         {
-                            generatedId = RandomDataGeneration.GenerateRandomData(idNumberConfig.Length, allowedChars, random.Value, false);
+                            generatedId = RandomDataGeneration.GenerateRandomData(idNumberConfig.Length, allowedChars, random.Value);
                         } while (!generatedIds.Add(generatedId));  // Ensure uniqueness                      
 
                         uniqueIds.Add(new IdNumber

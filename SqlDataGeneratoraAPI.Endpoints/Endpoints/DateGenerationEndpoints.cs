@@ -21,12 +21,16 @@ public static class DateGenerationEndpoints
             [FromHeader] DateTime? max_date,
             [FromHeader] bool? include_time = false) =>
         {
+            if (min_date.Value.CompareTo(max_date.Value) == 1)
+            {
+                return Results.BadRequest(new { Message = "Start date cannot be after the end date." });
+            }
             min_date = min_date.HasValue? min_date : DateTime.Parse("1950-01-01");
             max_date = max_date.HasValue? max_date : DateTime.Parse("2060-12-31");
             DateConfig dateConfig = new DateConfig(
                 records.HasValue ? records.Value : 0,
-                min_date,
-                max_date,
+                min_date.Value,
+                max_date.Value,
                 include_time.Value
             );
             var valiteRecords = dateConfig.ValidateRecords();
@@ -34,10 +38,7 @@ public static class DateGenerationEndpoints
             {
                 return Results.Json(new { Message = valiteRecords.Message }, statusCode: valiteRecords.StatusCode);
             }
-            if (min_date.Value.CompareTo(max_date.Value) == 1)
-            {
-                return Results.BadRequest(new { Message = "Start date cannot be after the end date." });
-            }
+            
             
 
 
