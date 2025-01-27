@@ -17,9 +17,9 @@ public static class TelephoneGenerationEndpoints
 
         group.MapGet("/generate_telephone", async (
             [FromServices] ITelephoneGeneration telephoneGeneration,
-            [FromHeader] int? records,
-            [FromHeader] bool? include_code = false,
-            [FromHeader] int? length = 10) =>
+            [FromQuery] int? records,
+            [FromQuery] bool? include_code = false,
+            [FromQuery] int? length = 10) =>
         {
             TelephoneConfig telephoneConfig = new TelephoneConfig(
                 records.HasValue ? records.Value : 0, 

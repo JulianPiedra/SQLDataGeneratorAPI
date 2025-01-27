@@ -16,9 +16,9 @@ public static class NumberGenerationEndpoints
 
         group.MapGet("/generate_number", async (
             [FromServices] INumberGeneration numberGeneration,
-            [FromHeader] int? records,
-            [FromHeader] int? min_value,
-            [FromHeader] int? max_value) =>
+            [FromQuery] int? records,
+            [FromQuery] int? min_value,
+            [FromQuery] int? max_value) =>
         {
             if (min_value < max_value)
             {

@@ -1,30 +1,37 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using SqlDataGenerator.Endpoints;
-using SQLDataGeneratorAPI.DataAccess.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using static System.Net.WebRequestMethods;
-using SqlDataGeneratorAPI.Endpoints.Endpoints;
-using SqlDataGenerator.Logic.GenerationLogic;
 using SqlDataGenerator.Abstract.DependencyInjection;
-using SqlDataGenerator.Models;
+using SqlDataGenerator.Endpoints;
+using SqlDataGenerator.Logic.GenerationLogic;
+using SQLDataGeneratorAPI.DataAccess.Models;
+using SqlDataGeneratorAPI.Endpoints.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyHeader()  
+               .AllowAnyMethod(); 
+    });
+});
+
 builder.Services.AddDbContext<SQLGeneratorContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    // Add security definition for API key
     options.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
-        Name = "X_API_KEY", // The name of the header where the API key is passed
+        Name = "X_API_KEY",
         Type = SecuritySchemeType.ApiKey,
         Description = "Unauthorized. API key is missing or invalid."
-        
     });
-    // Apply the security definition globally
+
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -32,7 +39,6 @@ builder.Services.AddSwaggerGen(options =>
             {
                 Reference = new OpenApiReference
                 {
-                    
                     Type = ReferenceType.SecurityScheme,
                     Id = "ApiKey",
                 }
@@ -68,15 +74,17 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-};
-
+}
 
 app.UseHttpsRedirection();
 
 app.UseRouting();
 
+app.UseCors("AllowAll");
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapIdGenerationEndpoints();
 app.MapCountryGenerationEndpoints();
 app.MapNameGenerationEndpoints();
@@ -86,6 +94,5 @@ app.MapEmailGenerationEndpoints();
 app.MapDateGenerationEndpoints();
 app.MapTelephoneGenerationEndpoints();
 app.MapNumberGenerationEndpoints();
+
 app.Run();
-
-

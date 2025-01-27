@@ -16,10 +16,10 @@ public static class DateGenerationEndpoints
 
         group.MapGet("/generate_date", async (
             [FromServices] IDateGeneration dateGeneration,
-            [FromHeader] int? records,
-            [FromHeader] DateTime? min_date,
-            [FromHeader] DateTime? max_date,
-            [FromHeader] bool? include_time = false) =>
+            [FromQuery] int? records,
+            [FromQuery] DateTime? min_date,
+            [FromQuery] DateTime? max_date,
+            [FromQuery] bool? include_time = false) =>
         {
             if (min_date.Value.CompareTo(max_date.Value) == 1)
             {

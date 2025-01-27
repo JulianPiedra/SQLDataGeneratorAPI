@@ -16,7 +16,7 @@ public static class EmailGenerationEndpoints
 
         group.MapGet("/generate_email", async (
             [FromServices] IEmailGeneration emailGeneration,
-            [FromHeader] int? records) =>
+            [FromQuery] int? records) =>
         {
             Record record = new Record(records.HasValue ? records.Value : 0);
             var valiteRecords = record.ValidateRecords();

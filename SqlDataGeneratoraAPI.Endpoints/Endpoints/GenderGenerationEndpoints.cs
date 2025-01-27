@@ -16,7 +16,7 @@ public static class GenderGenerationEndpoints
 
         group.MapGet("/generate_gender", async (
             [FromServices] IGenderGeneration genderGeneration,
-            [FromHeader] int? records) =>
+            [FromQuery] int? records) =>
         {
             Record record = new Record(records.HasValue ? records.Value : 0);
             var valiteRecords = record.ValidateRecords();

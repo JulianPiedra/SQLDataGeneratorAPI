@@ -18,9 +18,9 @@ namespace SqlDataGenerator.Endpoints
 
             group.MapGet("/generate_id", async (
                 [FromServices] IIdGeneration idGeneration,
-                [FromHeader] int? length,
-                [FromHeader] int? records,
-                [FromHeader] bool? has_letters = false) =>
+                [FromQuery] int? length,
+                [FromQuery] int? records,
+                [FromQuery] bool? has_letters = false) =>
         {
             Record record = new Record(records.HasValue ? records.Value : 0);
             var valiteRecords = record.ValidateRecords();
