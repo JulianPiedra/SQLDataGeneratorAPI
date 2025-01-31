@@ -9,12 +9,14 @@ namespace SqlDataGenerator.Models
     public class Record
     {
         public int Records { get; set; }
+        public string? RecordName { get; set; }
         public Record()
         {
         }
-        public Record(int records)
+        public Record(int records, string? recordName)
         {
             Records = records;
+            RecordName = recordName;
         }
 
         public BusinessLogicResponse ValidateRecords()

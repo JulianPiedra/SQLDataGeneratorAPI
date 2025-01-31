@@ -20,6 +20,7 @@ namespace SqlDataGenerator.Logic.GenerationLogic
             try
             {
                 string allowedChars = "0123456789";
+                var key = string.IsNullOrEmpty(telephoneConfig.RecordName) ? "telephone" : telephoneConfig.RecordName;
                 var random = new ThreadLocal<Random>(() => new Random(Guid.NewGuid().GetHashCode()));
                 dynamic telephoneList = null;
                 var telephoneGeneration = new ConcurrentBag<object>();
@@ -34,7 +35,7 @@ namespace SqlDataGenerator.Logic.GenerationLogic
                                 random.Value,
                                 true
                             );
-                        telephoneGeneration.Add(!telephoneConfig.IncludeCode ? new { telephone = Int64.Parse(telephoneNumber) } : telephoneNumber);
+                        telephoneGeneration.Add(telephoneNumber);
                     })
 
                 );
@@ -47,14 +48,16 @@ namespace SqlDataGenerator.Logic.GenerationLogic
                             f => f.NumericCode
                         );
                     telephoneList = telephoneGeneration.ToList().Zip(randomNumericCode, (telephone, numCode) =>
-                        new
+                        new Dictionary<string, object>
                         {
-                            telephone = $"{numCode} {telephone}"
+                            {key, $"{numCode} {telephone}" }
                         }).ToList();
                 }
                 else
                 {
-                    telephoneList = telephoneGeneration.ToList();
+                    telephoneList = telephoneGeneration
+                        .Select(telephone => new Dictionary<string, object> { { key, telephone } })
+                        .ToList();
                 }
 
                 return new BusinessLogicResponse { StatusCode = 200, ObjectResponse = telephoneList };

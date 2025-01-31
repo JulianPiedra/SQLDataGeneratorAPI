@@ -6,9 +6,10 @@ namespace SqlDataGenerator.Models
     {
         public int Length { get; set; }
         public bool IncludeCode { get; set; }
-        public TelephoneConfig(int records, int length, bool includeCode)
+        public TelephoneConfig(int records,string? recordName, int length, bool includeCode)
         {
             Records = records;
+            RecordName = recordName;
             Length = length;
             IncludeCode = includeCode;
         }

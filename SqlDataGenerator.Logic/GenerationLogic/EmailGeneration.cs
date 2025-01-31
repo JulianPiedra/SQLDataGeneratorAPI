@@ -1,4 +1,5 @@
-﻿using SqlDataGenerator.Abstract.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using SqlDataGenerator.Abstract.DependencyInjection;
 using SqlDataGenerator.Logic.GenerationUtils;
 using SqlDataGenerator.Models;
 using SQLDataGeneratorAPI.DataAccess.Models;
@@ -42,11 +43,12 @@ namespace SqlDataGenerator.Logic.GenerationLogic
                 var random = new Random();
 
                 // Combine the results of both tasks
+                var key = string.IsNullOrEmpty(records.RecordName) ? "email" : records.RecordName;
                 var result = randomNames
                 .Zip(randomLastNames, (firstName, lastName) => new { FirstName = firstName.ToLower(), LastName = lastName.ToLower() })
-                .Zip(randomEmailExtension, (combined, emailExtension) => new
+                .Zip(randomEmailExtension, (combined, emailExtension) => new Dictionary<string, object>
                 {
-                    Email = $"{combined.FirstName}{combined.LastName}{RandomDataGeneration.GenerateRandomNumber(999,random)}{emailExtension}"
+                    { key, $"{combined.FirstName}{combined.LastName}{RandomDataGeneration.GenerateRandomNumber(999, random)}{emailExtension}" }
                 }).ToList();
 
 

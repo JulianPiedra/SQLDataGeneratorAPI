@@ -18,7 +18,8 @@ public static class NumberGenerationEndpoints
             [FromServices] INumberGeneration numberGeneration,
             [FromQuery] int? records,
             [FromQuery] int? min_value,
-            [FromQuery] int? max_value) =>
+            [FromQuery] int? max_value,
+            [FromQuery] string ? record_name = null) =>
         {
             if (min_value < max_value)
             {
@@ -28,6 +29,7 @@ public static class NumberGenerationEndpoints
             max_value = max_value.HasValue? max_value : 100000000;
             NumberConfig numberConfig = new NumberConfig(
                 records.HasValue ? records.Value : 0,
+                record_name,
                 min_value.Value,
                 max_value.Value
             );

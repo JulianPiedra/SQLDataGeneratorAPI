@@ -6,9 +6,10 @@ namespace SqlDataGenerator.Models
     {
         public int Length { get; set; }
         public bool HasLetters { get; set; }
-        public IdNumberConfig(int records, int length, bool hasLetters)
+        public IdNumberConfig(int records, string? recordName, int length, bool hasLetters)
         {
             Records = records;
+            RecordName = recordName;
             Length = length;
             HasLetters = hasLetters;
         }

@@ -18,12 +18,13 @@ namespace SqlDataGenerator.Logic.GenerationLogic
             {
                 var random = new ThreadLocal<Random>(() => new Random(Guid.NewGuid().GetHashCode()));
                 var numberList = new ConcurrentBag<object>();
+                var key = string.IsNullOrEmpty(numberConfig.RecordName) ? "number" : numberConfig.RecordName;
 
                 await Task.WhenAll(
                     Enumerable.Range(0, numberConfig.Records).Select(async _ =>
                     {
                         var pickedNumber = RandomDataGeneration.GenerateRandomNumber(numberConfig.MinValue, numberConfig.MaxValue, random.Value);
-                        numberList.Add(new { number = pickedNumber });
+                        numberList.Add(new Dictionary<string, object> { { key, pickedNumber } });
                     })
                 );
 

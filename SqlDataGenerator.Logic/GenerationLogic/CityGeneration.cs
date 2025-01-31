@@ -5,6 +5,7 @@ using SQLDataGeneratorAPI.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using SqlDataGenerator.Abstract.DependencyInjection;
 using SqlDataGenerator.Logic.GenerationUtils;
+using Microsoft.IdentityModel.Tokens;
 
 namespace SqlDataGenerator.Logic.GenerationLogic
 {
@@ -21,8 +22,8 @@ namespace SqlDataGenerator.Logic.GenerationLogic
             {
                 var randomCountries = await FetchFromDatabase.FetchObjectListFromDatabase(
                                             records.Records,
-                                            "city",
-                                            Context.City,
+                                            string.IsNullOrEmpty(records.RecordName) ? "city" : records.RecordName,
+                Context.City,
                                             f => f.CityName);
 
                 return new BusinessLogicResponse { StatusCode = 200, ObjectResponse = randomCountries };

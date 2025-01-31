@@ -17,6 +17,8 @@ namespace SqlDataGenerator.Logic.GenerationLogic
             try
             {
                 var random = new ThreadLocal<Random>(() => new Random(Guid.NewGuid().GetHashCode()));
+                var key = string.IsNullOrEmpty(records.RecordName) ? "gender" : records.RecordName;
+
                 var genders = new List<string>
                 {
                     "Male",
@@ -31,13 +33,13 @@ namespace SqlDataGenerator.Logic.GenerationLogic
                     Enumerable.Range(0, records.Records).Select(async _ =>
                     {
                         var pickedGender = RandomDataGeneration.PickRandomData(genders, random.Value);
-                        gendersList.Add(new { gender = pickedGender });
+                        gendersList.Add(new Dictionary<string, object> { { key, pickedGender } });
                     })
                 );
 
                 return new BusinessLogicResponse
                 {
-                    StatusCode = 200, 
+                    StatusCode = 200,
                     ObjectResponse = gendersList.ToList()
                 };
             }

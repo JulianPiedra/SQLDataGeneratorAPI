@@ -21,7 +21,7 @@ namespace SqlDataGenerator.Logic.GenerationLogic
             {
                 var randomCountries = await FetchFromDatabase.FetchObjectListFromDatabase(
                                             records.Records,
-                                            "country",
+                                            string.IsNullOrEmpty(records.RecordName) ? "country" : records.RecordName,
                                             Context.Country,
                                             f => f.CountryName);
 
@@ -38,7 +38,7 @@ namespace SqlDataGenerator.Logic.GenerationLogic
             {
                 var randomAlphaCode = await FetchFromDatabase.FetchObjectListFromDatabase(
                                             records.Records,
-                                            "alpha_code",
+                                            string.IsNullOrEmpty(records.RecordName) ? "alpha_code" : records.RecordName, 
                                             Context.Country, f => f.AlphaCode);
 
                 return new BusinessLogicResponse { StatusCode = 200, ObjectResponse = randomAlphaCode };
@@ -55,7 +55,7 @@ namespace SqlDataGenerator.Logic.GenerationLogic
             {
                 var randomNumericCode = await FetchFromDatabase.FetchObjectListFromDatabase(
                                             records.Records,
-                                            "numeric_code",
+                                            string.IsNullOrEmpty(records.RecordName) ? "numeric_code" : records.RecordName,
                                             Context.Country,
                                             f => f.NumericCode);
 

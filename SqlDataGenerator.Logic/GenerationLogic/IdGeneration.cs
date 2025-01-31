@@ -15,12 +15,14 @@ namespace SqlDataGenerator.Logic.GenerationLogic
             {
                 var random = new ThreadLocal<Random>(() => new Random(Guid.NewGuid().GetHashCode()));
                 var allowedChars = "0123456789";
+                var key = string.IsNullOrEmpty(idNumberConfig.RecordName) ? "id" : idNumberConfig.RecordName;
+
                 if (idNumberConfig.HasLetters)
                 {
                     allowedChars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                 }
 
-                var uniqueIds = new ConcurrentBag<IdNumber>();  // Thread-safe collection
+                var uniqueIds = new ConcurrentBag<object>();  // Thread-safe collection
                 var generatedIds = new HashSet<string>(); // To ensure no duplicates
 
 
@@ -35,9 +37,9 @@ namespace SqlDataGenerator.Logic.GenerationLogic
                             generatedId = RandomDataGeneration.GenerateRandomData(idNumberConfig.Length, allowedChars, random.Value);
                         } while (!generatedIds.Add(generatedId));  // Ensure uniqueness                      
 
-                        uniqueIds.Add(new IdNumber
+                        uniqueIds.Add(new Dictionary<string, object>
                         {
-                            Id =  generatedId
+                            { key, generatedId }
                         });
                     })
                 );

@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SqlDataGenerator.Logic.GenerationLogic
 {
@@ -23,7 +24,9 @@ namespace SqlDataGenerator.Logic.GenerationLogic
                     Enumerable.Range(0, dateConfig.Records).Select(async _ =>
                     {
                         var pickedDate = RandomDataGeneration.GenerateRandomDate(dateConfig.MinDate, dateConfig.MaxDate, dateConfig.IncludeTime, random.Value);
-                        dateList.Add(new { date = pickedDate });
+                        var key = string.IsNullOrEmpty(dateConfig.RecordName) ? "date" : dateConfig.RecordName;
+                        dateList.Add(new Dictionary<string, object> { { key, pickedDate } });
+
                     })
                 );
 

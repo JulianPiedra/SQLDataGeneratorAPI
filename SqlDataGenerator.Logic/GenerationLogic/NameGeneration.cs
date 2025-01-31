@@ -21,6 +21,7 @@ namespace SqlDataGenerator.Logic.GenerationLogic
 
             try
             {
+                var key = string.IsNullOrEmpty(records.RecordName) ? "whole_name" : records.RecordName;
 
                 // Start the tasks concurrently with their own DbContext instance
                 var randomFirstNames = await FetchFromDatabase.FetchStringListFromDatabase(
@@ -35,9 +36,9 @@ namespace SqlDataGenerator.Logic.GenerationLogic
                             f => f.LastName1);
 
                 // Combine the results of both tasks
-                var result = randomFirstNames.Zip(randomLastNames, (firstName, lastName) => new
+                var result = randomFirstNames.Zip(randomLastNames, (firstName, lastName) => new Dictionary<string, object>
                 {
-                    whole_name = $"{firstName} {lastName}"
+                    {key , $"{firstName} {lastName}"}
                 }).ToList();
 
                 return new BusinessLogicResponse { StatusCode = 200, ObjectResponse = result };
@@ -56,7 +57,7 @@ namespace SqlDataGenerator.Logic.GenerationLogic
 
                 var randomFirstNames = await FetchFromDatabase.FetchObjectListFromDatabase(
                                             records.Records,
-                                            "first_name",
+                                            string.IsNullOrEmpty(records.RecordName) ? "first_name" : records.RecordName,
                                             Context.FirstName,
                                             f => f.FirstName1);
                 return new BusinessLogicResponse { StatusCode = 200, ObjectResponse = randomFirstNames };
@@ -74,7 +75,7 @@ namespace SqlDataGenerator.Logic.GenerationLogic
 
                 var randomLastNames = await FetchFromDatabase.FetchObjectListFromDatabase(
                                             records.Records,
-                                            "last_name",
+                                            string.IsNullOrEmpty(records.RecordName) ? "last_name" : records.RecordName,
                                             Context.LastName,
                                             f => f.LastName1);
                 return new BusinessLogicResponse { StatusCode = 200, ObjectResponse = randomLastNames };

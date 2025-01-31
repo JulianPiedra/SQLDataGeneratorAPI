@@ -19,10 +19,12 @@ public static class TelephoneGenerationEndpoints
             [FromServices] ITelephoneGeneration telephoneGeneration,
             [FromQuery] int? records,
             [FromQuery] bool? include_code = false,
-            [FromQuery] int? length = 10) =>
+            [FromQuery] int? length = 10,
+            [FromQuery] string ? record_name = null) =>
         {
             TelephoneConfig telephoneConfig = new TelephoneConfig(
                 records.HasValue ? records.Value : 0, 
+                record_name,
                 length.Value,
                 include_code.Value
                 );

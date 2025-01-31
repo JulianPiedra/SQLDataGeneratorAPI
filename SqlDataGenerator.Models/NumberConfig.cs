@@ -6,9 +6,10 @@ namespace SqlDataGenerator.Models
     {
         public int MinValue { get; set; }
         public int MaxValue { get; set; }
-        public NumberConfig(int records, int minValue, int maxValue)
+        public NumberConfig(int records, string? recordName, int minValue, int maxValue)
         {
             Records = records;
+            RecordName = recordName;
             MinValue = minValue;
             MaxValue = maxValue;
         }

@@ -20,9 +20,10 @@ namespace SqlDataGenerator.Endpoints
                 [FromServices] IIdGeneration idGeneration,
                 [FromQuery] int? length,
                 [FromQuery] int? records,
-                [FromQuery] bool? has_letters = false) =>
+                [FromQuery] bool? has_letters = false,
+                [FromQuery] string ? record_name = null) =>
         {
-            Record record = new Record(records.HasValue ? records.Value : 0);
+            Record record = new Record(records.HasValue ? records.Value : 0, record_name);
             var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {
@@ -49,6 +50,7 @@ namespace SqlDataGenerator.Endpoints
 
             IdNumberConfig idNumberConfig = new IdNumberConfig(
                 records.Value,
+                record_name,
                 length.Value,
                 has_letters.Value
             );

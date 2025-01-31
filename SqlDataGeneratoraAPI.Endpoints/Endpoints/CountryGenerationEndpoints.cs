@@ -16,9 +16,10 @@ public static class CountryGenerationEndpoints
 
         group.MapGet("/generate_country", async (
             [FromServices] ICountryGeneration countryGeneration,
-            [FromQuery] int? records) =>
+            [FromQuery] int? records,
+            [FromQuery] string? record_name = null) =>
         {
-            Record record = new Record(records.HasValue ? records.Value : 0);
+            Record record = new Record(records.HasValue ? records.Value : 0,record_name);
             var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {
@@ -37,9 +38,10 @@ public static class CountryGenerationEndpoints
 
         group.MapGet("/generate_alpha_code", async (
             [FromServices] ICountryGeneration countryGeneration,
-            [FromQuery] int? records) =>
+            [FromQuery] int? records,
+            [FromQuery] string ? record_name = null) =>
         {
-            Record record = new Record(records.HasValue ? records.Value : 0);
+            Record record = new Record(records.HasValue ? records.Value : 0, record_name);
             var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {
@@ -58,9 +60,10 @@ public static class CountryGenerationEndpoints
 
         group.MapGet("/generate_numeric_code", async (
             [FromServices] ICountryGeneration countryGeneration,
-            [FromQuery] int? records) =>
+            [FromQuery] int? records,
+            [FromQuery] string ? record_name = null) =>
         {
-            Record record = new Record(records.HasValue ? records.Value : 0);
+            Record record = new Record(records.HasValue ? records.Value : 0, record_name);
             var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {
