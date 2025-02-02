@@ -16,9 +16,12 @@ namespace SqlDataGenerator.Logic.GenerationLogic
 
             try
             {
-                var random = new ThreadLocal<Random>(() => new Random(Guid.NewGuid().GetHashCode()));
+                // If the record name is not provided, use the default name "gender"
                 var key = string.IsNullOrEmpty(records.RecordName) ? "gender" : records.RecordName;
 
+                // The Random class is not thread-safe, so we need to create a new instance for each thread
+                var random = new ThreadLocal<Random>(() => new Random(Guid.NewGuid().GetHashCode()));
+                
                 var genders = new List<string>
                 {
                     "Male",
@@ -27,8 +30,10 @@ namespace SqlDataGenerator.Logic.GenerationLogic
                     "Prefer not to say"
                 };
 
+                // Use ConcurrentBag to store the generated numbers in a thread-safe collection
                 var gendersList = new ConcurrentBag<object>();
 
+                // Generate data concurrently with the given parameters
                 await Task.WhenAll(
                     Enumerable.Range(0, records.Records).Select(async _ =>
                     {

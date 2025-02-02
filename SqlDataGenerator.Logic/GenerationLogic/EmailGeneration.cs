@@ -24,7 +24,13 @@ namespace SqlDataGenerator.Logic.GenerationLogic
 
             try
             {
-                // Start the tasks concurrently with their own DbContext instance
+                // If the record name is not provided, use the default name "gender"
+                var key = string.IsNullOrEmpty(records.RecordName) ? "gender" : records.RecordName;
+
+
+                var random = new Random();
+
+                //Fetch the data as a string list to later merge them as a single string
                 var randomNames = await FetchFromDatabase.FetchStringListFromDatabase(
                             records.Records,
                             Context.FirstName,
@@ -40,10 +46,7 @@ namespace SqlDataGenerator.Logic.GenerationLogic
                             Context.Email,
                             f => f.EmailExtension);
 
-                var random = new Random();
-
-                // Combine the results of both tasks
-                var key = string.IsNullOrEmpty(records.RecordName) ? "email" : records.RecordName;
+                // Merge the results of all tasks
                 var result = randomNames
                 .Zip(randomLastNames, (firstName, lastName) => new { FirstName = firstName.ToLower(), LastName = lastName.ToLower() })
                 .Zip(randomEmailExtension, (combined, emailExtension) => new Dictionary<string, object>

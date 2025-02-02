@@ -17,14 +17,20 @@ namespace SqlDataGenerator.Logic.GenerationLogic
 
             try
             {
+                // If the record name is not provided, use the default name "date"
+                var key = string.IsNullOrEmpty(dateConfig.RecordName) ? "date" : dateConfig.RecordName;
+
+                // The Random class is not thread-safe, so we need to create a new instance for each thread
                 var random = new ThreadLocal<Random>(() => new Random(Guid.NewGuid().GetHashCode()));
+
+                // Use ConcurrentBag to store the generated numbers in a thread-safe collection
                 var dateList = new ConcurrentBag<object>();
 
+                // Generate data concurrently with the given parameters
                 await Task.WhenAll(
                     Enumerable.Range(0, dateConfig.Records).Select(async _ =>
                     {
                         var pickedDate = RandomDataGeneration.GenerateRandomDate(dateConfig.MinDate, dateConfig.MaxDate, dateConfig.IncludeTime, random.Value);
-                        var key = string.IsNullOrEmpty(dateConfig.RecordName) ? "date" : dateConfig.RecordName;
                         dateList.Add(new Dictionary<string, object> { { key, pickedDate } });
 
                     })

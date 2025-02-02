@@ -21,14 +21,13 @@ namespace SqlDataGenerator.Logic.GenerationLogic
 
             try
             {
+                // If the record name is not provided, use the default name "number"
                 var key = string.IsNullOrEmpty(records.RecordName) ? "whole_name" : records.RecordName;
 
-                // Start the tasks concurrently with their own DbContext instance
                 var randomFirstNames = await FetchFromDatabase.FetchStringListFromDatabase(
                             records.Records,
                             Context.FirstName,
                             f => f.FirstName1);
-
 
                 var randomLastNames = await FetchFromDatabase.FetchStringListFromDatabase(
                             records.Records,
@@ -51,15 +50,14 @@ namespace SqlDataGenerator.Logic.GenerationLogic
         }
         public async Task<BusinessLogicResponse> GenerateFirstNames(Record records)
         {
-
             try
             {
-
                 var randomFirstNames = await FetchFromDatabase.FetchObjectListFromDatabase(
                                             records.Records,
                                             string.IsNullOrEmpty(records.RecordName) ? "first_name" : records.RecordName,
                                             Context.FirstName,
                                             f => f.FirstName1);
+
                 return new BusinessLogicResponse { StatusCode = 200, ObjectResponse = randomFirstNames };
             }
             catch (Exception ex)

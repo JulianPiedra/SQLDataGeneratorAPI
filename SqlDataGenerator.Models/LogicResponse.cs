@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace SqlDataGenerator.Models
 {
+    //This class manages responses produced by the logic 
     public class BusinessLogicResponse
     {
         public int StatusCode { get; set; } = 200;

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace SqlDataGenerator.Models
 {
+    //Class to reference for the record validation on all the endpoints and also it's children
     public class Record
     {
         public int Records { get; set; }

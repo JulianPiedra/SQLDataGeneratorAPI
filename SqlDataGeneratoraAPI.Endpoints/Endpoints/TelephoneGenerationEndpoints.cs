@@ -18,14 +18,14 @@ public static class TelephoneGenerationEndpoints
         group.MapGet("/generate_telephone", async (
             [FromServices] ITelephoneGeneration telephoneGeneration,
             [FromQuery] int? records,
+            [FromQuery] int? length,
             [FromQuery] bool? include_code = false,
-            [FromQuery] int? length = 10,
             [FromQuery] string ? record_name = null) =>
         {
             TelephoneConfig telephoneConfig = new TelephoneConfig(
                 records.HasValue ? records.Value : 0, 
                 record_name,
-                length.Value,
+                length.HasValue && length > 0 ? length.Value: 10,
                 include_code.Value
                 );
             var valiteRecords = telephoneConfig.ValidateRecords();

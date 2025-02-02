@@ -13,20 +13,26 @@ namespace SqlDataGenerator.Logic.GenerationLogic
         {
             try
             {
+                // If the record name is not provided, use the default name "id"
+                var key = string.IsNullOrEmpty(idNumberConfig.RecordName) ? "id" : idNumberConfig.RecordName;
+
+                // The Random class is not thread-safe, so we need to create a new instance for each thread
                 var random = new ThreadLocal<Random>(() => new Random(Guid.NewGuid().GetHashCode()));
                 var allowedChars = "0123456789";
-                var key = string.IsNullOrEmpty(idNumberConfig.RecordName) ? "id" : idNumberConfig.RecordName;
 
                 if (idNumberConfig.HasLetters)
                 {
                     allowedChars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                 }
 
-                var uniqueIds = new ConcurrentBag<object>();  // Thread-safe collection
-                var generatedIds = new HashSet<string>(); // To ensure no duplicates
+                // Use ConcurrentBag to store the generated numbers in a thread-safe collection
+                var uniqueIds = new ConcurrentBag<object>();
+
+                // Hashset to ensure uniqueness of generated IDs
+                var generatedIds = new HashSet<string>();
 
 
-                // Use Parallel.For to generate IDs concurrently for large numbers of records
+                // Generate data concurrently with the given parameters
                 await Task.WhenAll(
                     Enumerable.Range(0, idNumberConfig.Records).Select(async _ =>
                     {

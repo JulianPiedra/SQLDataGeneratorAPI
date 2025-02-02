@@ -23,7 +23,7 @@ namespace SqlDataGenerator.Logic.GenerationLogic
                 var randomCountries = await FetchFromDatabase.FetchObjectListFromDatabase(
                                             records.Records,
                                             string.IsNullOrEmpty(records.RecordName) ? "city" : records.RecordName,
-                Context.City,
+                                            Context.City,
                                             f => f.CityName);
 
                 return new BusinessLogicResponse { StatusCode = 200, ObjectResponse = randomCountries };

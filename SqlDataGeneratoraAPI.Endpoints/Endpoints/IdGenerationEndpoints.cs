@@ -18,24 +18,20 @@ namespace SqlDataGenerator.Endpoints
 
             group.MapGet("/generate_id", async (
                 [FromServices] IIdGeneration idGeneration,
-                [FromQuery] int? length,
                 [FromQuery] int? records,
+                [FromQuery] int? length,
                 [FromQuery] bool? has_letters = false,
-                [FromQuery] string ? record_name = null) =>
+                [FromQuery] string? record_name = null) =>
         {
             Record record = new Record(records.HasValue ? records.Value : 0, record_name);
             var valiteRecords = record.ValidateRecords();
+            
+            //Give a default value to length 
+            length = length.HasValue && length > 0 ? length.Value : 10;
+
             if (valiteRecords.StatusCode != 200)
             {
                 return Results.Json(new { Message = valiteRecords.Message }, statusCode: valiteRecords.StatusCode);
-            }
-            if (length > 40)
-            {
-                return Results.BadRequest(new { Message = "Length can't be greater than 40" });
-            }
-            if (length == null)
-            {
-                return Results.BadRequest(new { Message = "Length is required" });
             }
             if (length.Value < 6)
             {
@@ -47,7 +43,6 @@ namespace SqlDataGenerator.Endpoints
                 }
             }
 
-
             IdNumberConfig idNumberConfig = new IdNumberConfig(
                 records.Value,
                 record_name,
@@ -58,11 +53,10 @@ namespace SqlDataGenerator.Endpoints
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),
-                _ => Results.Json(new { Message= result.Message }, statusCode: result.StatusCode)
+                _ => Results.Json(new { Message = result.Message }, statusCode: result.StatusCode)
             };
         }).RequireAuthorization()
             .WithOpenApi();
-
 
         }
     }

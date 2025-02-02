@@ -12,8 +12,11 @@ namespace SqlDataGenerator.Logic.GenerationUtils
         public static string GenerateRandomData(int length, string allowedChars, Random random)
         {
             try
-            { // Use StringBuilder to construct the ID efficiently
+            {
+                // Use StringBuilder to construct the object
                 var stringBuilder = new StringBuilder(length);
+
+                //creates a random string with the given characters
                 for (int i = 0; i < length; i++)
                 {
                     stringBuilder.Append(allowedChars[random.Next(allowedChars.Length)]);
@@ -74,7 +77,6 @@ namespace SqlDataGenerator.Logic.GenerationUtils
             try
             {
                 var randomInt = random.Next(minLength, maxLength);
-
                 return randomInt;
             }
             catch (Exception ex)
@@ -104,6 +106,7 @@ namespace SqlDataGenerator.Logic.GenerationUtils
             {
                 var randomDate = minDate.Value.AddDays(GenerateRandomNumber((maxDate - minDate).Value.Days + 1, random));
 
+                // If the date should include time, add random hours, minutes, seconds, and milliseconds
                 if (includeTime)
                 {
                     // Add random hours, minutes, seconds, and milliseconds
@@ -116,6 +119,7 @@ namespace SqlDataGenerator.Logic.GenerationUtils
                     randomDate = randomDate.Add(randomTimeSpan);
                 }
 
+                // Return the formated date as a string
                 return !includeTime ? randomDate.ToString("yyyy-MM-dd") : randomDate;
             }
             catch (Exception ex)
@@ -123,7 +127,7 @@ namespace SqlDataGenerator.Logic.GenerationUtils
                 throw new Exception(ex.Message);
             }
         }
-        //Pick random data from the given list
+        //Pick random index from the given list
         public static string PickRandomData(List<string> itemList, Random random)
         {
             try

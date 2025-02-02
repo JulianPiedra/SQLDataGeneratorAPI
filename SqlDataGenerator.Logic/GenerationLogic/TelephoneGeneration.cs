@@ -19,12 +19,19 @@ namespace SqlDataGenerator.Logic.GenerationLogic
         {
             try
             {
-                string allowedChars = "0123456789";
+                // If the record name is not provided, use the default name "telephone"
                 var key = string.IsNullOrEmpty(telephoneConfig.RecordName) ? "telephone" : telephoneConfig.RecordName;
+
+                string allowedChars = "0123456789";
+
+                // The Random class is not thread-safe, so we need to create a new instance for each thread
                 var random = new ThreadLocal<Random>(() => new Random(Guid.NewGuid().GetHashCode()));
                 dynamic telephoneList = null;
+
+                // Use ConcurrentBag to store the generated numbers in a thread-safe collection
                 var telephoneGeneration = new ConcurrentBag<object>();
 
+                // Generate data concurrently with the given parameters
                 await Task.WhenAll(
                     Enumerable.Range(0, telephoneConfig.Records).Select(async _ =>
                     {
@@ -39,6 +46,8 @@ namespace SqlDataGenerator.Logic.GenerationLogic
                     })
 
                 );
+
+                //Fetch and add country codes if needed
                 if (telephoneConfig.IncludeCode)
                 {
                     var randomNumericCode =

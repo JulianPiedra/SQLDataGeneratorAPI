@@ -9,8 +9,12 @@ using System.Threading.Tasks;
 
 namespace SqlDataGenerator.Logic.GenerationUtils
 {
+    
     public static class FetchFromDatabase
     {
+        //Class to fetch records from the database directly as a list, 
+        //parameter to know how many records, how is the elements going to be named,
+        //the table from which it's going to fetch, and the column to fetch
         public static async Task<List<object>> FetchObjectListFromDatabase<TEntity>(
             int? records,
             string objectIdentifier,
@@ -20,14 +24,10 @@ namespace SqlDataGenerator.Logic.GenerationUtils
         {
             try
             {
-                // Ensure the number of records is valid
-                if (records == null || records <= 0)
-                    throw new ArgumentException("Records must be a positive integer.", nameof(records));
-
                 // Fetch random records from the database
                 var randomResults = await dbSet
                     .OrderBy(r => Guid.NewGuid())
-                    .Take(records.Value)
+                    .Take(records!.Value)
                     .Select(selector)
                     .ToListAsync();
 
@@ -57,6 +57,8 @@ namespace SqlDataGenerator.Logic.GenerationUtils
             }
                 
         }
+        //Generates a list of string without a base object to easily merge lists later on,
+        //receives the same parameters as FetchObjectListFromDatabase but the objectIdentifier
         public static async Task<List<string>> FetchStringListFromDatabase<TEntity>(
            int? records,
            DbSet<TEntity> dbSet,
@@ -64,14 +66,12 @@ namespace SqlDataGenerator.Logic.GenerationUtils
            where TEntity : class
         {
             try {
-                // Ensure the number of records is valid
-                if (records == null || records <= 0)
-                    throw new ArgumentException("Records must be a positive integer.", nameof(records));
+
 
                 // Fetch random records from the database
                 var randomResults = await dbSet
                     .OrderBy(r => Guid.NewGuid())
-                    .Take(records.Value)
+                    .Take(records!.Value)
                     .Select(selector)
                     .ToListAsync();
 
@@ -81,7 +81,6 @@ namespace SqlDataGenerator.Logic.GenerationUtils
                     randomResults.AddRange(randomResults.Take(records.Value - randomResults.Count));
                 }
 
-                // Return the formatted result
                 return randomResults;
             }
             catch (Exception ex)
