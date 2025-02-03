@@ -25,7 +25,7 @@ namespace SqlDataGenerator.Endpoints
         {
             Record record = new Record(records.HasValue ? records.Value : 0, record_name);
             var valiteRecords = record.ValidateRecords();
-            
+            if( length > 40) return Results.BadRequest(new { Message = "Length cannot be greater than 40" });
             //Give a default value to length 
             length = length.HasValue && length > 0 ? length.Value : 10;
 

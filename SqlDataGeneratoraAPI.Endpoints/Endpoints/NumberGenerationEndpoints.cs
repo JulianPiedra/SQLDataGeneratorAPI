@@ -21,7 +21,7 @@ public static class NumberGenerationEndpoints
             [FromQuery] int? max_value,
             [FromQuery] string ? record_name = null) =>
         {
-            if (min_value < max_value)
+            if (min_value > max_value)
             {
                 return Results.BadRequest(new { Message = "Minimum value cannot be grater than the maximum value." });
             }

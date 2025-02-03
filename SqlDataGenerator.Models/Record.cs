@@ -23,7 +23,7 @@ namespace SqlDataGenerator.Models
         public BusinessLogicResponse ValidateRecords()
         {
 
-            if (Records == 0)
+            if (Records <= 0)
             {
                 return new BusinessLogicResponse
                 {
@@ -39,6 +39,7 @@ namespace SqlDataGenerator.Models
                     Message = "Records cannot exceed 1,000,000"
                 };
             }
+           
             return new BusinessLogicResponse
             {
                 StatusCode = 200,
