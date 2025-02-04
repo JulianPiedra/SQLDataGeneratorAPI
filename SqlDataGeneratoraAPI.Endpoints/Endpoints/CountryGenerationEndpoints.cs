@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using SqlDataGenerator.Logic;
 using SqlDataGenerator.Models;
 using SqlDataGenerator.Abstract.DependencyInjection;
+using SQLDataGeneratorAPI.Endpoints.Endpoints.Documentation;
 namespace SqlDataGeneratorAPI.Endpoints.Endpoints;
 
 public static class CountryGenerationEndpoints
@@ -17,9 +18,10 @@ public static class CountryGenerationEndpoints
         group.MapGet("/generate_country", async (
             [FromServices] ICountryGeneration countryGeneration,
             [FromQuery] int? records,
-            [FromQuery] string? record_name = null) =>
+            [FromQuery] string? record_name = null
+        ) =>
         {
-            Record record = new Record(records.HasValue ? records.Value : 0,record_name);
+            Record record = new Record(records.HasValue ? records.Value : 0, record_name);
             var valiteRecords = record.ValidateRecords();
             if (valiteRecords.StatusCode != 200)
             {
@@ -30,16 +32,29 @@ public static class CountryGenerationEndpoints
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),
-                _ => Results.Json((new { Message= result.Message }, statusCode: result.StatusCode))
+                _ => Results.Json(new { Message = result.Message }, statusCode: result.StatusCode)
             };
         })
         .WithName("GetCountries")
-        .WithOpenApi();
+        .WithOpenApi(operation =>
+        {
+            operation.Summary = "Generates a list of countries.";
+            operation.Description = "Generates a list of countries.";
+            operation.Parameters[0].Description = "The number of records to generate.";
+            operation.Parameters[1].Description = "The name of the record object (optional).";
+            operation.Responses["200"] = GetDocumentation.Return200("A list of generated countries.", "country", "Sample Country");
+            operation.Responses["400"] = GetDocumentation.Return400();
+            operation.Responses["401"] = GetDocumentation.Return401();
+            operation.Responses["500"] = GetDocumentation.Return500();
+            return operation;
+        });
+
 
         group.MapGet("/generate_alpha_code", async (
             [FromServices] ICountryGeneration countryGeneration,
             [FromQuery] int? records,
-            [FromQuery] string ? record_name = null) =>
+            [FromQuery] string? record_name = null
+        ) =>
         {
             Record record = new Record(records.HasValue ? records.Value : 0, record_name);
             var valiteRecords = record.ValidateRecords();
@@ -52,16 +67,28 @@ public static class CountryGenerationEndpoints
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),
-                _ => Results.Json((new { Message= result.Message }, statusCode: result.StatusCode))
+                _ => Results.Json(new { Message = result.Message }, statusCode: result.StatusCode)
             };
         })
         .WithName("GetAlphaCodes")
-        .WithOpenApi();
+        .WithOpenApi(operation =>
+        {
+            operation.Summary = "Generates a list of alpha country codes.";
+            operation.Description = "Generates a list of alpha country codes.";
+            operation.Parameters[0].Description = "The number of records to generate.";
+            operation.Parameters[1].Description = "The name of the record object (optional).";
+            operation.Responses["200"] = GetDocumentation.Return200("A list of generated alpha country codes.", "alpha_code", "US");
+            operation.Responses["400"] = GetDocumentation.Return400();
+            operation.Responses["401"] = GetDocumentation.Return401();
+            operation.Responses["500"] = GetDocumentation.Return500();
+            return operation;
+        });
 
         group.MapGet("/generate_numeric_code", async (
             [FromServices] ICountryGeneration countryGeneration,
             [FromQuery] int? records,
-            [FromQuery] string ? record_name = null) =>
+            [FromQuery] string? record_name = null
+        ) =>
         {
             Record record = new Record(records.HasValue ? records.Value : 0, record_name);
             var valiteRecords = record.ValidateRecords();
@@ -74,10 +101,21 @@ public static class CountryGenerationEndpoints
             return result.StatusCode switch
             {
                 200 => Results.Ok(result.ObjectResponse),
-                _ => Results.Json(new { Message= result.Message }, statusCode: result.StatusCode)
+                _ => Results.Json(new { Message = result.Message }, statusCode: result.StatusCode)
             };
         })
         .WithName("GetNumericCodes")
-        .WithOpenApi();
+        .WithOpenApi(operation =>
+        {
+            operation.Summary = "Generates a list of numeric country codes.";
+            operation.Description = "Generates a list of numeric country codes.";
+            operation.Parameters[0].Description = "The number of records to generate.";
+            operation.Parameters[1].Description = "The name of the record object (optional).";
+            operation.Responses["200"] = GetDocumentation.Return200("A list of generated numeric country codes.", "numeric_code", "1");
+            operation.Responses["400"] = GetDocumentation.Return400();
+            operation.Responses["401"] = GetDocumentation.Return401();
+            operation.Responses["500"] = GetDocumentation.Return500();
+            return operation;
+        });
     }
 }

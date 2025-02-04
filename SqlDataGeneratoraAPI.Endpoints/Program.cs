@@ -5,9 +5,11 @@ using SqlDataGenerator.Endpoints;
 using SqlDataGenerator.Logic.GenerationLogic;
 using SQLDataGeneratorAPI.DataAccess.Models;
 using SqlDataGeneratorAPI.Endpoints.Endpoints;
+using System.Reflection;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
-string apiKey = builder.Configuration.GetValue<string>("ApiKey");
 //CORS Configuration 
 builder.Services.AddCors(options =>
 {
@@ -31,7 +33,10 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "SQL Data Generator API",
         Version = "v1",
-        Description = "An API for generating structured SQL test data",
+        Description = "An API for generating structured SQL test data. <br><br>" +
+                      "**Links:** <br>" +
+                      "[Data Generation Site](https://julianpiedra.github.io/sqldatagenerator/) <br>" +
+                      "[GitHub Repo](https://github.com/JulianPiedra/SQLDataGeneratorAPI) <br>",
         Contact = new OpenApiContact
         {
             Name = "Julian Piedra",
@@ -95,7 +100,6 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.DocumentTitle = "SQL Data Generator - API Docs";
-    c.ConfigObject.AdditionalItems.Add("ApiKey", apiKey);
 });
 
 //Use the auth middleware after the Swagger middleware to display ui
